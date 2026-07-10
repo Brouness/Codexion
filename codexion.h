@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 17:04:11 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 12:46:18 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 # define CODEXION_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 # define SCHEDULER_FIFO 0
 # define SCHEDULER_EDF 1
 
 typedef struct codexion
 {
-	int number_of_coders;
-	int time_to_burnout;
-	int time_to_compile;
-	int time_to_debug;
-	int time_to_refactor;
-	int number_of_compiles_required;
-	int dongle_cooldown;
-	int sheduler;
-} t_args;
+	int		number_of_coders;
+	long	time_to_burnout;
+	long	time_to_compile;
+	long	time_to_debug;
+	long	time_to_refactor;
+	int		number_of_compiles_required;
+	int		dongle_cooldown;
+	int		sheduler;
+}			t_args;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 17:10:17 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 12:52:53 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int validate_arguments(char *s)
 
 	while (s[i])
 	{
-		if (s[i] == '+' && i == 0)
+		if (s[i] == '+' && i == 0 && s[i++])
 			i++;
-		if (s[i] <= '9' && s[i] >= '0')
+		else if (s[i] <= '9' && s[i] >= '0')
 			i++;
 		else
 			return 1;
@@ -51,5 +51,7 @@ int main(int ac, char **av)
 				return printf("invalid arguments %s", av[i]);
 			i++;
 		}
+		n.number_of_coders = atol(av[1]);
+		printf("%d\n", n.number_of_coders);
 	}
 }
