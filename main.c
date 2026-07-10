@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 16:47:42 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 18:51:02 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,19 @@ int main(int ac, char **av)
 		printf("Invalid number of arguments\n");
 	else
 	{
-		if (parse_args(av))
+		if (parse_args(av, &n))
+		{
+			printf("invalid arguments\n");
 			return 0;
-		n.number_of_coders = atoi(av[1]);
+		}
 		printf("%d\n", n.number_of_coders);
+		printf("%ld\n", n.time_to_burnout);
+		printf("%ld\n", n.time_to_compile);
+		printf("%ld\n", n.time_to_debug);
+		printf("%ld\n", n.time_to_refactor);
+		printf("%d\n", n.number_of_compiles_required);
+		printf("%ld\n", n.dongle_cooldown);
+		printf("%d\n", n.sheduler);
 	}
 	
 }

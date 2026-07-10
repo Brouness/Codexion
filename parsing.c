@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 16:29:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 16:36:27 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 18:44:45 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int validate_arguments(char *s)
 
 	while (s[i])
 	{
-		if (s[i] == '+' && i == 0 && s[i++])
+		if (s[i] == '+' && i == 0)
 			i++;
+		if (!s[i])
+			return 1;
 		else if (s[i] <= '9' && s[i] >= '0')
 			i++;
 		else
@@ -36,19 +38,29 @@ int validate_arguments(char *s)
 	return 0;
 }
 
-int	parse_args(char **s)
+int	parse_args(char **s, t_args *n)
 {
-	int	i;
+	int		i;
 
-	i = 0;
-	while (s[i])
+	i = 1;
+	while (i < 8)
 	{
 		if (validate_arguments(s[i]))
-		{
-			printf("Error: argument %s", s[i]);
 			return 1;
-		}
 		i++;
 	}
+	if (strcmp(s[i], "fifo") && strcmp(s[i], "edf"))
+		return 1;
+	n->number_of_coders = atoi(s[1]);
+	n->time_to_burnout = atol(s[2]);
+	n->time_to_compile = atol(s[3]);
+	n->time_to_debug = atol(s[4]);
+	n->time_to_refactor = atol(s[5]);
+	n->number_of_compiles_required = atoi(s[6]);
+	n->dongle_cooldown = atol(s[7]);
+	if (!strcmp(s[i], "fifo"))
+		n->sheduler = SCHEDULER_FIFO;
+	else
+		n->sheduler = SCHEDULER_EDF;
 	return 0;
 }
