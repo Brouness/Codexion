@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 18:51:02 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 18:59:58 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,4 @@ int main(int ac, char **av)
 		printf("%ld\n", n.dongle_cooldown);
 		printf("%d\n", n.sheduler);
 	}
-	
 }
