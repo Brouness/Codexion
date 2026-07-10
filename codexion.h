@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 12:46:18 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/10 16:40:56 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,8 @@ typedef struct codexion
 	int		dongle_cooldown;
 	int		sheduler;
 }			t_args;
+
+int validate_arguments(char *s);
+int	parse_args(char **s);
 
 #endif
