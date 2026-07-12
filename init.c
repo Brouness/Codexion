@@ -6,7 +6,13 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 15:35:16 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/07/12 10:14:46 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "codexion.h"
+
+void	init(void)
+{
+	t_coder coders[5]
+}
