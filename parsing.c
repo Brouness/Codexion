@@ -41,7 +41,7 @@ int validate_arguments(char *s)
 int	parse_args(char **s, t_args *n)
 {
 	int		i;
-
+	sleep(2);
 	i = 1;
 	while (i < 8)
 	{
