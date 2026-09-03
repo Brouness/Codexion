@@ -15,12 +15,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 # define SCHEDULER_FIFO 0
 # define SCHEDULER_EDF 1
 
-typedef struct codexion
+typedef struct t_codexion
 {
 	int		number_of_coders;
 	long	time_to_burnout;
@@ -31,6 +31,21 @@ typedef struct codexion
 	long	dongle_cooldown;
 	int		sheduler;
 }			t_args;
+
+typedef struct s_coder
+{
+	int	c_id;
+	t_dongle	*left;
+	t_dongle	*right;
+	t_args		*ptr;
+} t_coder;
+
+typedef struct s_dongle
+{
+	int		dongle_available;
+	
+}	t_dongle;
+
 
 int validate_arguments(char *s);
 int	parse_args(char **s, t_args *n);

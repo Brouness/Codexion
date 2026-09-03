@@ -14,5 +14,6 @@
 
 void	init(void)
 {
-	t_coder coders[5]
+	t_coder coders[5];
+	
 }
