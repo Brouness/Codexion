@@ -12,8 +12,16 @@
 
 #include "codexion.h"
 
-void	init(void)
+t_data_needed	*init(t_args *args)
 {
-	t_coder coders[5];
-	
+    t_data_needed    data;
+
+    data.args = args;
+    data.coders = malloc(sizeof(pthread_t) * args->number_of_coders);
+    if (!data.coders)
+    {
+        free(data.coders);
+        return 0;
+    }
+    return (&data);
 }

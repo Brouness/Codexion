@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <pthread.h>
 
 # define SCHEDULER_FIFO 0
 # define SCHEDULER_EDF 1
@@ -32,20 +34,17 @@ typedef struct t_codexion
 	int		sheduler;
 }			t_args;
 
-typedef struct s_coder
+typedef struct s_data_needed
 {
-	int	c_id;
-	t_dongle	*left;
-	t_dongle	*right;
-	t_args		*ptr;
-} t_coder;
+	pthread_t		*coders;
+	t_args		*args;
+}	t_data_needed;
 
 typedef struct s_dongle
 {
-	int		dongle_available;
-	
+	pthread_mutex_t	dongle_mut;
+	int				dongle_id;
 }	t_dongle;
-
 
 int validate_arguments(char *s);
 int	parse_args(char **s, t_args *n);
