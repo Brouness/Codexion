@@ -10,3 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "codexion.h"
+
+void    destroy_simulation(t_simulation *sim)
+{
+    pthread_mutex_destroy(&sim->log_lock);
+    pthread_mutex_destroy(&sim->state_lock);
+    pthread_cond_destroy(&sim->state_cond);
+    free(sim);
+    return ;
+}
