@@ -22,6 +22,8 @@
 # define SCHEDULER_FIFO 0
 # define SCHEDULER_EDF 1
 
+typedef struct s_simulation t_simulation;
+
 typedef struct t_codexion
 {
 	int		number_of_coders;
@@ -34,21 +36,44 @@ typedef struct t_codexion
 	int		sheduler;
 }			t_args;
 
-typedef struct s_data_needed
-{
-	pthread_t		*coders;
-	t_args		*p_args;
-}	t_data_needed;
-
 typedef struct s_dongle
 {
 	pthread_mutex_t	dongle_mut;
 	pthread_cond_t	con_var;
 	int				dongle_id;
-	t_args			*p_args;
+	int				is_held;
+	long			available_at_ms;
 }	t_dongle;
 
-int validate_arguments(char *s);
-int	parse_args(char **s, t_args *n);
+typedef struct s_coder
+{
+	int				id;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+	pthread_t		*thread;
+	long			last_compile_start;
+	int				compile_done;
+	t_simulation	*sim;
+}	t_coder;
+
+
+typedef	struct s_simulation
+{
+	t_args		*infos;
+	t_coder		*coders;
+	t_dongle	*dongles;
+	// pthread_t	monitor_thread;
+	// long		start_time;
+
+	// int				stopped;
+	pthread_mutex_t		state_lock;
+	pthread_cond_t		state_cond;
+
+	pthread_mutex_t		log_lock;
+}	t_simulation;
+
+int 			validate_arguments(char *s);
+int				parse_args(char **s, t_args *n);
+t_simulation	*init_args(t_args *args);
 
 #endif

@@ -38,6 +38,20 @@ int validate_arguments(char *s)
 	return 0;
 }
 
+int	check_numbers(char **s)
+{
+	int	i;
+
+	i = 1;
+	while (i < 8)
+	{
+		if (atol(s[i]) <= 0)
+			return (1);
+		i++;
+	}
+	return 0;
+}
+
 int	parse_args(char **s, t_args *n)
 {
 	int		i;
@@ -50,6 +64,8 @@ int	parse_args(char **s, t_args *n)
 		i++;
 	}
 	if (strcmp(s[i], "fifo") && strcmp(s[i], "edf"))
+		return 1;
+	if (check_numbers(s))
 		return 1;
 	n->number_of_coders = atoi(s[1]);
 	n->time_to_burnout = atol(s[2]);

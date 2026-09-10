@@ -16,7 +16,7 @@ int	main(int ac, char **av)
 {
 	int				i;
 	t_args			args;
-	t_data_needed	*ptr;
+	// t_data_needed	*ptr;
 
 	i = 1;
 	if (ac != 9)
@@ -28,12 +28,12 @@ int	main(int ac, char **av)
 			printf("invalid arguments\n");
 			return (0);
 		}
-		ptr = init(args);
-		if (!ptr)
-		{
-			fprintf(stderr,"error");
-		}
-		i = 0;
+		// ptr = init_args(&args);
+		// if (!ptr)
+		// {
+		// 	fprintf(stderr,"error");
+		// }
+		// i = 0;
 		// while(i < args.number_of_coders)
 		// {
 		// 	pthread_create(&ptr->coders[i], NULL, start_cooder_routine, ptr);
@@ -46,5 +46,7 @@ int	main(int ac, char **av)
 		printf("%d\n", args.number_of_compiles_required);
 		printf("%ld\n", args.dongle_cooldown);
 		printf("%d\n", args.sheduler);
+		// printf("%lu\n", sizeof(ptr->coders));
+		// free(ptr->coders);
 	}
 }
