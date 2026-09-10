@@ -34,10 +34,10 @@ int	main(int ac, char **av)
 			fprintf(stderr,"error");
 		}
 		i = 0;
-		while(i < args.number_of_coders)
-		{
-			pthread_create(&ptr->coders[i], NULL, start_cooder_routine, ptr);
-		}
+		// while(i < args.number_of_coders)
+		// {
+		// 	pthread_create(&ptr->coders[i], NULL, start_cooder_routine, ptr);
+		// }
 		printf("%d\n", args.number_of_coders);
 		printf("%ld\n", args.time_to_burnout);
 		printf("%ld\n", args.time_to_compile);

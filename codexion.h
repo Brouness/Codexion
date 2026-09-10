@@ -37,13 +37,15 @@ typedef struct t_codexion
 typedef struct s_data_needed
 {
 	pthread_t		*coders;
-	t_args		*args;
+	t_args		*p_args;
 }	t_data_needed;
 
 typedef struct s_dongle
 {
 	pthread_mutex_t	dongle_mut;
+	pthread_cond_t	con_var;
 	int				dongle_id;
+	t_args			*p_args;
 }	t_dongle;
 
 int validate_arguments(char *s);
