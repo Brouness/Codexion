@@ -12,33 +12,29 @@
 
 #include "codexion.h"
 
-static int	start_simulation(t_args args)
+static int	start_simulation(t_args *args)
 {
 	t_simulation	*sim;
+	int				i;
 
-	sim = init_simulation(&args);
+	i = 0;
+	sim = init_simulation(args);
 	if (!sim)
 		return (-1);
-	if (init_coders(sim))
-	{
-		destroy_simulation(sim);
-		return (-1);
-	}
-	if (init_dongles(sim))
-	{
-		destroy_simulation(sim);
-		free(sim->coders);
-		return (-1);
-	}
-	int i = 0;
-	int nbr = sim->infos->number_of_coders;
-	while(i < nbr)
+	while(i < sim->infos->number_of_coders)
 	{
 		pthread_create(&sim->coders[i].thread, NULL, thread_loging, &sim->coders[i]);
 		i++;
 	}
+	i = 0;
+	while(i < sim->infos->number_of_coders)
+	{
+		pthread_join(sim->coders[i].thread, NULL);
+		i++;
+	}
+	printf("stiilll heere\n");
+	destroy_simulation(sim);
 	return (0);
-
 }
 
 int	main(int ac, char **av)
@@ -57,24 +53,11 @@ int	main(int ac, char **av)
 			printf("invalid arguments\n");
 			return (-1);
 		}
-		if (start_simulation(args))
+		if (start_simulation(&args))
 		{
-			printf("invalid arguments\n");
+			printf("something went wrong in your machine my code is goddem good :)\n");
 			return (-1);
 		}
-		while(i < sim->infos->number_of_coders)
-		{
-			pthread_join(sim->coders[i].thread, NULL);
-			i++;
-		}
-		printf("%d\n", args.number_of_coders);
-		printf("%ld\n", args.time_to_burnout);
-		printf("%ld\n", args.time_to_compile);
-		printf("%ld\n", args.time_to_debug);
-		printf("%ld\n", args.time_to_refactor);
-		printf("%d\n", args.number_of_compiles_required);
-		printf("%ld\n", args.dongle_cooldown);
-		printf("%d\n", args.sheduler);
-
 	}
+	return (0);
 }

@@ -14,15 +14,13 @@
 
 int	init_dongles(t_simulation *sim)
 {
-	int	nbr;
 	int	i;
 
-	nbr = sim->infos->number_of_coders;
 	i = 0;
-	sim->dongles = malloc(sizeof(t_dongle) * nbr);
+	sim->dongles = malloc(sizeof(t_dongle) * sim->infos->number_of_coders);
 	if (!sim->dongles)
 		return (-1);
-	while (i < nbr)
+	while (i < sim->infos->number_of_coders)
 	{
 		sim->dongles[i].is_held = 0;
 		sim->dongles[i].dongle_id = i + 1;
@@ -36,7 +34,7 @@ int	init_dongles(t_simulation *sim)
 		}
 		i++;
 	}
-	if (i < nbr)
+	if (i < sim->infos->number_of_coders)
 	{
 		while (i-- > 0)
 		{
@@ -66,7 +64,7 @@ int	init_coders(t_simulation *sim)
 		sim->coders[i].last_compile_start = 0;
 		sim->coders[i].right_dongle = &sim->dongles[i];
 		sim->coders[i].left_dongle = &sim->dongles[(i - 1 + nbr) % nbr];
-		sim->coders[i].sim = sim;
+		sim->coders[i].args = sim->infos;
 		i++;
 	}
 	return (0);
@@ -82,30 +80,54 @@ long	get_time_fn(void)
 	curent_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (curent_time);
 }
+int	init_simulation_objects(t_simulation *sim)
+{
+	if (init_dongles(sim))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
+	if (init_coders(sim))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
+	return (0);
+}
 
 t_simulation	*init_simulation(t_args *args)
 {
 	t_simulation	*sim;
 
-	if (-1 == (sim->start_time = get_time_fn()))
-		return (NULL);
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 		return (NULL);
+	if (-1 == (sim->start_time = get_time_fn()))
+	{
+		free(sim);
+		return (NULL);
+	}
 	sim->infos = args;
 	sim->stopped = 0;
 	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
+	{
+		free(sim);
 		return (NULL);
+	}
 	if (0 != pthread_cond_init(&sim->state_cond, NULL))
 	{
 		pthread_mutex_destroy(&sim->log_lock);
+		free(sim);
 		return (NULL);
 	}
 	if (0 != pthread_mutex_init(&sim->state_lock, NULL))
 	{
 		pthread_mutex_destroy(&sim->log_lock);
 		pthread_cond_destroy(&sim->state_cond);
+		free(sim);
 		return (NULL);
 	}
+	if (init_simulation_objects(sim))
+		return (NULL);
 	return (sim);
 }

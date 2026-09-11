@@ -52,18 +52,18 @@ typedef struct s_coder
 	t_dongle		*left_dongle;
 	t_dongle		*right_dongle;
 	pthread_t		thread;
+	pthread_mutex_t	last_compile_start_mut;
 	long			last_compile_start;
 	int				compile_done;
-	t_simulation	*sim;
+	t_args			*args;
 }	t_coder;
-
 
 typedef	struct s_simulation
 {
 	t_args			*infos;
 	t_coder			*coders;
 	t_dongle		*dongles;
-	// pthread_t	monitor_thread;
+	pthread_t		monitor_thread;
 	long			start_time;
 	int				stopped;
 	pthread_mutex_t	state_lock;
@@ -77,9 +77,10 @@ int				init_dongles(t_simulation *sim);
 int				init_coders(t_simulation *sim);
 
 //clean memory
-void    destroy_simulation(t_simulation *sim);
-void    *thread_loging(void *args);
-int 			validate_arguments(char *s);
-int				parse_args(char **s, t_args *n);
+void	destroy_simulation(t_simulation *sim);
+void	*thread_loging(void *args);
+int 	validate_arguments(char *s);
+int		parse_args(char **s, t_args *n);
+long	get_time_fn(void);
 
 #endif

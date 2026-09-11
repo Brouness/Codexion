@@ -16,14 +16,21 @@ void    *thread_loging(void *args)
 {
     t_coder *thread;
     int id;
+    long    current_time;
+
     thread = (t_coder *) args;
     id = thread->id;
     pthread_mutex_lock(&thread->sim->log_lock);
-    printf("Coder id: %d Start login\n", thread->id);
+    current_time = get_time_fn();
+    printf("%ld %d has taken a dongle\n", current_time, thread->id);
     pthread_mutex_lock(&thread->left_dongle->dongle_mut);
-    printf("Coder id: %d is locking dongle id: %d\n", id, thread->left_dongle->dongle_id);
+    current_time = get_time_fn();
+    printf("%ld %d is compiling\n", current_time, id);
     pthread_mutex_unlock(&thread->left_dongle->dongle_mut);
-    printf("Coder release dongle id %d\n", thread->left_dongle->dongle_id);
+    current_time = get_time_fn();
+    printf("%ld %d is debugging\n", current_time, id);
+    current_time = get_time_fn();
+    printf("%ld %d is refactoring\n", current_time, id);
     pthread_mutex_unlock(&thread->sim->log_lock);
     return NULL;
 }
