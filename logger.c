@@ -20,7 +20,7 @@ void    *thread_loging(void *args)
 
     thread = (t_coder *) args;
     id = thread->id;
-    pthread_mutex_lock(&thread->sim->log_lock);
+    pthread_mutex_lock(&thread->last_compile_start_mut);
     current_time = get_time_fn();
     printf("%ld %d has taken a dongle\n", current_time, thread->id);
     pthread_mutex_lock(&thread->left_dongle->dongle_mut);
@@ -31,6 +31,6 @@ void    *thread_loging(void *args)
     printf("%ld %d is debugging\n", current_time, id);
     current_time = get_time_fn();
     printf("%ld %d is refactoring\n", current_time, id);
-    pthread_mutex_unlock(&thread->sim->log_lock);
+    pthread_mutex_unlock(&thread->last_compile_start_mut);
     return NULL;
 }

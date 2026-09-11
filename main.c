@@ -55,7 +55,7 @@ int	main(int ac, char **av)
 		}
 		if (start_simulation(&args))
 		{
-			printf("something went wrong in your machine my code is goddem good :)\n");
+			printf("something went wrong in your machine my code is goddeam good :)\n");
 			return (-1);
 		}
 	}
