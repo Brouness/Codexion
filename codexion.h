@@ -55,7 +55,7 @@ typedef struct s_coder
 	pthread_mutex_t	last_compile_start_mut;
 	long			last_compile_start;
 	int				compile_done;
-	t_args			*args;
+	t_simulation	*sim;
 }	t_coder;
 
 typedef	struct s_simulation
