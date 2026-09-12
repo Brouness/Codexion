@@ -23,7 +23,7 @@ static int	start_simulation(t_args *args)
 		return (-1);
 	while(i < sim->infos->number_of_coders)
 	{
-		pthread_create(&sim->coders[i].thread, NULL, thread_loging, &sim->coders[i]);
+		pthread_create(&sim->coders[i].thread, NULL, couder_routine, &sim->coders[i]);
 		i++;
 	}
 	i = 0;

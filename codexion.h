@@ -24,7 +24,7 @@
 # define SCHEDULER_EDF 1
 
 typedef struct s_simulation t_simulation;
-
+// struct timeval	time;
 typedef struct t_codexion
 {
 	int		number_of_coders;
@@ -36,7 +36,10 @@ typedef struct t_codexion
 	long	dongle_cooldown;
 	int		sheduler;
 }			t_args;
-
+typedef struct s_time
+{
+	struct timespec	time;
+} t_time;
 typedef struct s_dongle
 {
 	pthread_mutex_t	dongle_mut;
@@ -78,9 +81,13 @@ int				init_coders(t_simulation *sim);
 
 //clean memory
 void	destroy_simulation(t_simulation *sim);
-void	*thread_loging(void *args);
+void	*couder_routine(void *args);
 int 	validate_arguments(char *s);
 int		parse_args(char **s, t_args *n);
 long	get_time_fn(void);
+
+int acquire_dongle(t_dongle *dongle);
+void    release_dongle(t_dongle *dongle, long cooldown_ms);
+
 
 #endif
