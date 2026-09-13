@@ -94,4 +94,6 @@ void    release_dongle(t_dongle *dongle, long cooldown_ms);
 //log helpers
 void    log_message(long time_ms, int id, char *msg);
 
+void    *monitor_routine(void *args);
+
 #endif

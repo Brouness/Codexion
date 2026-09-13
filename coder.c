@@ -12,7 +12,17 @@
 
 #include "codexion.h"
 
-
+static int	check_sim_stopped(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->sim->state_lock);
+	if (coder->sim->stopped)
+	{
+		pthread_mutex_unlock(&coder->sim->state_lock);
+		return 0;
+	}
+	pthread_mutex_unlock(&coder->sim->state_lock);
+	return 1;
+}
 void	*couder_routine(void *args)
 {
 	t_coder *thread;
@@ -36,7 +46,7 @@ void	*couder_routine(void *args)
 	}
 	number_of_compile = 0;
 	id = thread->id;
-	while(thread->sim->stopped != 1 && number_of_compile < thread->sim->infos->number_of_compiles_required)
+	while(check_sim_stopped(thread) && number_of_compile < thread->sim->infos->number_of_compiles_required)
 	{
 		acquire_dongle(first);
 		acquire_dongle(second);

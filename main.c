@@ -26,12 +26,14 @@ static int	start_simulation(t_args *args)
 		pthread_create(&sim->coders[i].thread, NULL, couder_routine, &sim->coders[i]);
 		i++;
 	}
+	pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim);
 	i = 0;
 	while(i < sim->infos->number_of_coders)
 	{
 		pthread_join(sim->coders[i].thread, NULL);
 		i++;
 	}
+	pthread_join(sim->monitor_thread, NULL);
 	printf("stiilll heere\n");
 	destroy_simulation(sim);
 	return (0);
