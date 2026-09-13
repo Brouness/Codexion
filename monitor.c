@@ -10,3 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "codexion.h"
+
+void    monitor_routine(void *args)
+{
+    t_simulation    *sim;
+
+    sim = (t_simulation *) args;
+    while (sim->stopped == 0)
+        pthread_cond_wait(&sim->state_cond);
+    
+}

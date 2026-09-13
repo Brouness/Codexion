@@ -22,7 +22,7 @@
 //     return timespec_;
 // }
 
-int acquire_dongle(t_dongle *dongle)
+void    acquire_dongle(t_dongle *dongle)
 {
     struct timespec deadline;
 
@@ -40,7 +40,6 @@ int acquire_dongle(t_dongle *dongle)
     }
     dongle->is_held = 1;
     pthread_mutex_unlock(&dongle->dongle_mut);
-    return 1;
 }
 
 void    release_dongle(t_dongle *dongle, long cooldown_ms)

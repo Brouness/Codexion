@@ -40,6 +40,7 @@ typedef struct s_time
 {
 	struct timespec	time;
 } t_time;
+
 typedef struct s_dongle
 {
 	pthread_mutex_t	dongle_mut;
@@ -86,8 +87,11 @@ int 	validate_arguments(char *s);
 int		parse_args(char **s, t_args *n);
 long	get_time_fn(void);
 
-int acquire_dongle(t_dongle *dongle);
+//dongles utils
+void	acquire_dongle(t_dongle *dongle);
 void    release_dongle(t_dongle *dongle, long cooldown_ms);
 
+//log helpers
+void    log_message(long time_ms, int id, char *msg);
 
 #endif

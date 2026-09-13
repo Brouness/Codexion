@@ -12,3 +12,7 @@
 
 #include "codexion.h"
 
+void    log_message(long time_ms, int id, char *msg)
+{
+    printf("%ld %d %s\n", time_ms, id, msg);
+}

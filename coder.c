@@ -13,53 +13,49 @@
 #include "codexion.h"
 
 
-void    *couder_routine(void *args)
+void	*couder_routine(void *args)
 {
 	t_coder *thread;
+
 	int		id;
-	long	current_time;
 	int		number_of_compile;
 
-	number_of_compile = 0;
+	t_dongle	*first;
+	t_dongle	*second;
 	thread = (t_coder *) args;
-	id = thread->id;
-	while(number_of_compile <= thread->sim->infos->number_of_compiles_required)
+
+	if (thread->left_dongle->dongle_id < thread->right_dongle->dongle_id)
 	{
-		pthread_mutex_lock(&thread->left_dongle->dongle_mut);
-		current_time = get_time_fn() - thread->sim->start_time;
-		if (thread->left_dongle->is_held == 0 && current_time >= thread->left_dongle->available_at_ms)
-		{
-			
-			thread->left_dongle->is_held = 1;
-			pthread_mutex_lock(&thread->sim->log_lock);
-			current_time = get_time_fn() - thread->sim->start_time;
-			printf("%ld %d has taken a dongle\n", current_time, thread->id);
-			pthread_mutex_unlock(&thread->sim->log_lock);
-			current_time = get_time_fn() - thread->sim->start_time;
-			thread->last_compile_start = get_time_fn() - thread->sim->start_time;
-			pthread_mutex_lock(&thread->sim->log_lock);
-			printf("%ld %d is compiling\n", current_time, id);
-			pthread_mutex_unlock(&thread->sim->log_lock);
-			usleep(thread->sim->infos->time_to_compile * 1000);
-			current_time = get_time_fn() - thread->sim->start_time;
-			pthread_mutex_lock(&thread->sim->log_lock);
-			printf("%ld %d is debugging\n", current_time, id);
-			pthread_mutex_unlock(&thread->sim->log_lock);
-			usleep(thread->sim->infos->time_to_debug * 1000);
-			current_time = get_time_fn() - thread->sim->start_time;
-			pthread_mutex_lock(&thread->sim->log_lock);
-			printf("%ld %d is refactoring\n", current_time, id);
-			pthread_mutex_unlock(&thread->sim->log_lock);
-			usleep(thread->sim->infos->time_to_refactor * 1000);
-			thread->left_dongle->is_held = 0;
-			thread->left_dongle->available_at_ms = get_time_fn() + thread->sim->infos->dongle_cooldown;
-			acquire_dongle(thread->left_dongle);
-			release_dongle(thread->left_dongle, thread->sim->infos->dongle_cooldown);
-			thread->left_dongle->available_at_ms = thread->sim->infos->dongle_cooldown + get_time_fn() - thread->sim->start_time;
-			
-			number_of_compile++;
-		}
-		pthread_mutex_unlock(&thread->left_dongle->dongle_mut);
+		first = thread->left_dongle;
+		second = thread->right_dongle;
+	}
+	else
+	{
+		first = thread->right_dongle;
+		second = thread->left_dongle;
+	}
+	number_of_compile = 0;
+	id = thread->id;
+	while(thread->sim->stopped != 1 && number_of_compile < thread->sim->infos->number_of_compiles_required)
+	{
+		acquire_dongle(first);
+		acquire_dongle(second);
+		pthread_mutex_lock(&thread->sim->log_lock);
+		log_message(get_time_fn() - thread->sim->start_time, id, "has taken a dongle");
+		log_message(get_time_fn() - thread->sim->start_time, id, "has taken a dongle");
+		log_message(get_time_fn() - thread->sim->start_time, id, "is compiling");
+		pthread_mutex_lock(&thread->sim->state_lock);
+		thread->last_compile_start = get_time_fn() - thread->sim->start_time;
+		pthread_mutex_unlock(&thread->sim->state_lock);
+		usleep(thread->sim->infos->time_to_compile * 1000);
+		release_dongle(first, thread->sim->infos->dongle_cooldown);
+		release_dongle(second, thread->sim->infos->dongle_cooldown);
+		log_message(get_time_fn() - thread->sim->start_time, id, "is debugging");
+		usleep(thread->sim->infos->time_to_debug * 1000);
+		log_message(get_time_fn() - thread->sim->start_time, id, "is refactoring");
+		usleep(thread->sim->infos->time_to_refactor * 1000);
+		pthread_mutex_unlock(&thread->sim->log_lock);
+		number_of_compile++;
 	}
 	return NULL;
 }

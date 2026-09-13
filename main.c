@@ -41,7 +41,6 @@ int	main(int ac, char **av)
 {
 	int				i;
 	t_args			args;
-	t_simulation	*sim;
 
 	i = 0;
 	if (ac != 9)
