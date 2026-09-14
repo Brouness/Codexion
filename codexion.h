@@ -59,6 +59,8 @@ typedef struct s_coder
 	pthread_mutex_t	last_compile_start_mut;
 	long			last_compile_start;
 	int				compile_done;
+	pthread_cond_t	thread_creation_cond;
+	pthread_mutex_t	thread_creation_mutex;
 	t_simulation	*sim;
 }	t_coder;
 
@@ -72,7 +74,10 @@ typedef	struct s_simulation
 	int				stopped;
 	pthread_mutex_t	state_lock;
 	pthread_cond_t	state_cond;
+	pthread_cond_t	thread_creation_cond;
+	pthread_mutex_t	thread_creation_mutex;
 	pthread_mutex_t	log_lock;
+	int				threads_created;
 }	t_simulation;
 
 //init all
@@ -88,11 +93,13 @@ int		parse_args(char **s, t_args *n);
 long	get_time_fn(void);
 
 //dongles utils
-void	acquire_dongle(t_dongle *dongle);
+int		acquire_dongle(t_dongle *dongle, t_coder *thread);
 void    release_dongle(t_dongle *dongle, long cooldown_ms);
 
 //log helpers
-void    log_message(long time_ms, int id, char *msg);
+void    log_message(t_simulation *sim, int id, char *msg);
+void    log_monitor_message(t_simulation *sim, int id, char *msg);
+int approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 
 void    *monitor_routine(void *args);
 

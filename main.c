@@ -12,6 +12,28 @@
 
 #include "codexion.h"
 
+static int	threads_creation(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->infos->number_of_coders)
+	{
+		if (pthread_create(&sim->coders[i].thread, NULL, couder_routine, &sim->coders[i]))
+		{
+			destroy_simulation(sim);
+			return (-1);
+		}
+		i++;
+	}
+	if (pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
+	return (0);
+}
+
 static int	start_simulation(t_args *args)
 {
 	t_simulation	*sim;
@@ -21,20 +43,27 @@ static int	start_simulation(t_args *args)
 	sim = init_simulation(args);
 	if (!sim)
 		return (-1);
-	while(i < sim->infos->number_of_coders)
-	{
-		pthread_create(&sim->coders[i].thread, NULL, couder_routine, &sim->coders[i]);
-		i++;
-	}
-	pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim);
+	if (threads_creation(sim))
+		return (-1);
+	pthread_mutex_lock(&sim->thread_creation_mutex);
+	sim->threads_created = 1;
+	pthread_cond_broadcast(&sim->thread_creation_cond);
+	pthread_mutex_unlock(&sim->thread_creation_mutex);
 	i = 0;
 	while(i < sim->infos->number_of_coders)
 	{
-		pthread_join(sim->coders[i].thread, NULL);
+		if (pthread_join(sim->coders[i].thread, NULL))
+		{
+			destroy_simulation(sim);
+			return (-1);
+		}
 		i++;
 	}
-	pthread_join(sim->monitor_thread, NULL);
-	printf("stiilll heere\n");
+	if (pthread_join(sim->monitor_thread, NULL))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
 	destroy_simulation(sim);
 	return (0);
 }

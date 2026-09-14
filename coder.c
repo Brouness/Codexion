@@ -23,17 +23,19 @@ static int	check_sim_stopped(t_coder *coder)
 	pthread_mutex_unlock(&coder->sim->state_lock);
 	return 1;
 }
+
 void	*couder_routine(void *args)
 {
 	t_coder *thread;
-
-	int		id;
 	int		number_of_compile;
-
 	t_dongle	*first;
 	t_dongle	*second;
-	thread = (t_coder *) args;
 
+	thread = (t_coder *) args;
+	pthread_mutex_lock(&thread->sim->thread_creation_mutex);
+	while(thread->sim->threads_created == 0)
+		pthread_cond_wait(&thread->sim->thread_creation_cond, &thread->sim->thread_creation_mutex);
+	pthread_mutex_unlock(&thread->sim->thread_creation_mutex);
 	if (thread->left_dongle->dongle_id < thread->right_dongle->dongle_id)
 	{
 		first = thread->left_dongle;
@@ -45,27 +47,15 @@ void	*couder_routine(void *args)
 		second = thread->left_dongle;
 	}
 	number_of_compile = 0;
-	id = thread->id;
 	while(check_sim_stopped(thread) && number_of_compile < thread->sim->infos->number_of_compiles_required)
 	{
-		acquire_dongle(first);
-		acquire_dongle(second);
-		pthread_mutex_lock(&thread->sim->log_lock);
-		log_message(get_time_fn() - thread->sim->start_time, id, "has taken a dongle");
-		log_message(get_time_fn() - thread->sim->start_time, id, "has taken a dongle");
-		log_message(get_time_fn() - thread->sim->start_time, id, "is compiling");
-		pthread_mutex_lock(&thread->sim->state_lock);
-		thread->last_compile_start = get_time_fn() - thread->sim->start_time;
-		pthread_mutex_unlock(&thread->sim->state_lock);
-		usleep(thread->sim->infos->time_to_compile * 1000);
-		release_dongle(first, thread->sim->infos->dongle_cooldown);
-		release_dongle(second, thread->sim->infos->dongle_cooldown);
-		log_message(get_time_fn() - thread->sim->start_time, id, "is debugging");
-		usleep(thread->sim->infos->time_to_debug * 1000);
-		log_message(get_time_fn() - thread->sim->start_time, id, "is refactoring");
-		usleep(thread->sim->infos->time_to_refactor * 1000);
-		pthread_mutex_unlock(&thread->sim->log_lock);
+		if (acquire_dongle(first, thread))
+			break;
+		else if (acquire_dongle(second, thread))
+			break;
+		if (approve_log(thread, first, second))
+			break;
 		number_of_compile++;
 	}
-	return NULL;
+	return (NULL);
 }

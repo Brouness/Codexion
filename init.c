@@ -62,7 +62,7 @@ int	init_coders(t_simulation *sim)
 	{
 		sim->coders[i].id = i + 1;
 		sim->coders[i].compile_done = 0;
-		sim->coders[i].last_compile_start = 0;
+		sim->coders[i].last_compile_start = sim->start_time;
 		sim->coders[i].right_dongle = &sim->dongles[i];
 		sim->coders[i].left_dongle = &sim->dongles[(i - 1 + nbr) % nbr];
 		sim->coders[i].sim = sim;
@@ -109,9 +109,23 @@ t_simulation	*init_simulation(t_args *args)
 		return (NULL);
 	}
 	sim->infos = args;
+	sim->threads_created = 0;
 	sim->stopped = 0;
+	if (0 != pthread_mutex_init(&sim->thread_creation_mutex, NULL))
+	{
+		free(sim);
+		return (NULL);
+	}
+	if (0 != pthread_cond_init(&sim->thread_creation_cond, NULL))
+	{
+		pthread_mutex_destroy(&sim->thread_creation_mutex);
+		free(sim);
+		return (NULL);
+	}
 	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
 	{
+		pthread_mutex_destroy(&sim->thread_creation_mutex);
+		pthread_cond_destroy(&sim->thread_creation_cond);
 		free(sim);
 		return (NULL);
 	}

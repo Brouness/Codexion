@@ -14,7 +14,7 @@
 
 int validate_arguments(char *s)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!s || !s[0])
@@ -55,7 +55,7 @@ int	check_numbers(char **s)
 int	parse_args(char **s, t_args *n)
 {
 	int		i;
-	sleep(2);
+
 	i = 1;
 	while (i < 8)
 	{
