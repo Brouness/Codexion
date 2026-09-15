@@ -31,6 +31,8 @@ void    destroy_simulation(t_simulation *sim)
     }
     if (sim->coders)
         free(sim->coders);
+    pthread_mutex_destroy(&sim->thread_creation_mutex);
+    pthread_cond_destroy(&sim->thread_creation_cond);
     pthread_mutex_destroy(&sim->log_lock);
     pthread_mutex_destroy(&sim->state_lock);
     pthread_cond_destroy(&sim->state_cond);

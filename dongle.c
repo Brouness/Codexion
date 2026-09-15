@@ -41,9 +41,6 @@ int	acquire_dongle(t_dongle *dongle, t_coder *thread)
 			pthread_cond_wait(&dongle->con_var, &dongle->dongle_mut);
 		else
 		{
-			// printf(
-			// "here is the lock\n"
-			// );
 			deadline.tv_sec = dongle->available_at_ms / 1000;
 			deadline.tv_nsec = (dongle->available_at_ms % 1000) * 1000000;
 			pthread_cond_timedwait(&dongle->con_var, &dongle->dongle_mut, &deadline);

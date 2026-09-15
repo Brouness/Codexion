@@ -24,6 +24,31 @@ static int	check_sim_stopped(t_coder *coder)
 	return 1;
 }
 
+static int validate_sim(t_dongle *first, t_dongle *second, t_coder *thread)
+{
+	int	validate;
+
+	if (acquire_dongle(first, thread))
+		return (-1);
+	else if (acquire_dongle(second, thread))
+	{
+		release_dongle(first, thread->sim->infos->dongle_cooldown);
+		return (-1);
+	}
+	validate = approve_log(thread, first, second);
+	if (validate)
+	{
+		if (validate == -1)
+		{
+			release_dongle(first, thread->sim->infos->dongle_cooldown);
+			release_dongle(second, thread->sim->infos->dongle_cooldown);
+			return (-1);
+		}
+		return (-1);
+	}
+	return (0);
+}
+
 void	*couder_routine(void *args)
 {
 	t_coder *thread;
@@ -49,11 +74,7 @@ void	*couder_routine(void *args)
 	number_of_compile = 0;
 	while(check_sim_stopped(thread) && number_of_compile < thread->sim->infos->number_of_compiles_required)
 	{
-		if (acquire_dongle(first, thread))
-			break;
-		else if (acquire_dongle(second, thread))
-			break;
-		if (approve_log(thread, first, second))
+		if (validate_sim(first, second, thread))
 			break;
 		number_of_compile++;
 	}

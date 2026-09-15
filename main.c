@@ -25,8 +25,8 @@ static int	threads_creation(t_simulation *sim)
 			return (-1);
 		}
 		i++;
-	}
-	if (pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim))
+	}	
+	if (i == sim->infos->number_of_coders && pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim))
 	{
 		destroy_simulation(sim);
 		return (-1);

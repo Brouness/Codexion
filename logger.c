@@ -55,16 +55,19 @@ int approve_log(t_coder *thread, t_dongle *first, t_dongle *second)
 	thread->last_compile_start = get_time_fn();
 	thread->compile_done++;
 	pthread_mutex_unlock(&thread->sim->state_lock);
-	usleep(thread->sim->infos->time_to_compile * 1000);
+	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_compile))
+		return (-1);
 	if (checker(thread->sim))
 		return (-1);
 	release_dongle(first, thread->sim->infos->dongle_cooldown);
 	release_dongle(second, thread->sim->infos->dongle_cooldown);
 	log_message(thread->sim, id, "is debugging");
-	usleep(thread->sim->infos->time_to_debug * 1000);
+	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_debug))
+		return (-2);
 	if (checker(thread->sim))
-		return (-1);
+		return (-2);
 	log_message(thread->sim, id, "is refactoring");
-	usleep(thread->sim->infos->time_to_refactor * 1000);
+	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_refactor))
+		return (-2);
 	return (0);
 }

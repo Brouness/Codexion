@@ -101,6 +101,11 @@ void    log_message(t_simulation *sim, int id, char *msg);
 void    log_monitor_message(t_simulation *sim, int id, char *msg);
 int approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 
+//monitor
 void    *monitor_routine(void *args);
+
+//time utils
+int interruptible_sleep(t_simulation *sim, long duration_ms);
+
 
 #endif

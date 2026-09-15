@@ -51,8 +51,8 @@ void    *monitor_routine(void *args)
 				{
 					sim->stopped = 1;
 					log_monitor_message(sim, sim->coders[i].id, "burned out");
-					pthread_mutex_unlock(&sim->state_lock);
 					pthread_cond_broadcast(&sim->state_cond);
+					pthread_mutex_unlock(&sim->state_lock);
 					wake_dongles(sim);
 					return NULL;
 				}
@@ -60,9 +60,15 @@ void    *monitor_routine(void *args)
 			i++;
 		}
 		if (all_done)
+		{
 			sim->stopped = 1;
+			pthread_cond_broadcast(&sim->state_cond);
+			pthread_mutex_unlock(&sim->state_lock);
+			wake_dongles(sim);
+			return (NULL);
+		}
 		pthread_mutex_unlock(&sim->state_lock);
 		usleep(1000);
 	}
-	return NULL;
+	return (NULL);
 }
