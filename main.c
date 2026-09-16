@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/08/29 17:00:03 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:59:14 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static int	threads_creation(t_simulation *sim)
 			return (-1);
 		}
 		i++;
-	}	
-	if (i == sim->infos->number_of_coders && pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim))
+	}
+	if (pthread_create(&sim->monitor_thread, NULL, monitor_routine, sim))
 	{
 		destroy_simulation(sim);
 		return (-1);
@@ -50,6 +50,11 @@ static int	start_simulation(t_args *args)
 	pthread_cond_broadcast(&sim->thread_creation_cond);
 	pthread_mutex_unlock(&sim->thread_creation_mutex);
 	i = 0;
+	if (pthread_join(sim->monitor_thread, NULL))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
 	while(i < sim->infos->number_of_coders)
 	{
 		if (pthread_join(sim->coders[i].thread, NULL))
@@ -59,11 +64,7 @@ static int	start_simulation(t_args *args)
 		}
 		i++;
 	}
-	if (pthread_join(sim->monitor_thread, NULL))
-	{
-		destroy_simulation(sim);
-		return (-1);
-	}
+
 	destroy_simulation(sim);
 	return (0);
 }
@@ -72,12 +73,12 @@ int	main(int ac, char **av)
 {
 	int				i;
 	t_args			args;
-
 	i = 0;
 	if (ac != 9)
 		printf("Invalid number of arguments\n");
 	else
 	{
+		printf("dfhdsjg");
 		if (parse_args(av, &args))
 		{
 			printf("invalid arguments\n");

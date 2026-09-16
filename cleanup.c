@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:53 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 15:34:54 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/16 12:54:49 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void    destroy_simulation(t_simulation *sim)
     if (sim->coders)
         free(sim->coders);
     pthread_mutex_destroy(&sim->thread_creation_mutex);
+    sim->stopped = 1;
+    sim->threads_created = 1;
+    pthread_cond_broadcast(&sim->thread_creation_cond);
     pthread_cond_destroy(&sim->thread_creation_cond);
     pthread_mutex_destroy(&sim->log_lock);
     pthread_mutex_destroy(&sim->state_lock);

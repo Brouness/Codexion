@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:26 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 15:35:27 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:57:49 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void    *monitor_routine(void *args)
 		pthread_cond_wait(&sim->thread_creation_cond, &sim->thread_creation_mutex);
 	pthread_mutex_unlock(&sim->thread_creation_mutex);
 	while(!sim->stopped)
-	{    
+	{
 		i = 0;
 		all_done = 1;
 		pthread_mutex_lock(&sim->state_lock);
@@ -68,7 +68,7 @@ void    *monitor_routine(void *args)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&sim->state_lock);
-		usleep(1000);
+		// usleep(1000);
 	}
 	return (NULL);
 }
