@@ -6,9 +6,11 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/16 22:38:35 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 08:11:24 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "codexion.h"
 
 typedef struct s_heap
 {
@@ -19,33 +21,34 @@ typedef struct s_heap
 
 void	heap_init(t_heap *h, int capacity)
 {
-	h->size = 0;
+	h->size = capacity;
 	h->data = malloc(sizeof(int) * capacity);
 	h->capacity = capacity;
 }
 
-int heap_insert(t_heap *h, int value)
+void	swap(int *shild, int *parent)
 {
-	int	tmp;
-	int	parrent;
+	int	*tmp;
 
-	if (h->size == h->capacity)
-		return (-1);
-	h->data[h->size] = value;
-	h->size++;
-	int	i = h->size - 1;
+	tmp = parent;
+	parent = shild;
+	shild = tmp;
+}
+
+void	heap_insert(t_heap *h, int value)
+{
+	int	i;
+	int	*parent;
+
+	i = h->size - 1;
+	h->data[i] = value;
 	while (i > 0)
 	{
-		parrent = h->data[(i - 1) / 2];
-		if (parrent > h->data[i])
-		{
-			tmp = h->data[(i - 1) / 2];
-			h->data[(i - 1) / 2] = value;
-			h->data[i] = tmp;
-		}
-		i = (i-1)/2;
+		parent = &h->data[(i + 1) / 2];
+		if (h->data[i] < *parent)
+			swap(&h->data[i], parent);
+		i = (i + 1) / 2;
 	}
-	return (0);
 }
 
 int	heap_extract_min(t_heap *h, int *out)
@@ -86,3 +89,18 @@ void	heap_destroy(t_heap *h)
 	free(h);
 }
 
+int main()
+{
+	int i = 0;
+	t_heap *heap;
+	heap_init(heap, 6);
+	while (i++ < 6)
+		heap_insert(heap, i + 10);
+	i = 0;
+	printf("debug\n");
+	for (i = 0; i < 6; i++)
+	{
+		printf("THIS IS INDEX %d in heap: %d\n", i, heap->data[i]);
+	}
+	return (0);	
+}
