@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:19 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 15:35:20 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 21:17:30 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	log_message(t_simulation *sim, int id, char *msg)
 {
-	pthread_mutex_lock(&sim->state_lock);
+	// pthread_mutex_lock(&sim->state_lock);
 	pthread_mutex_lock(&sim->log_lock);
-	if (sim->stopped == 0)
+	// if (sim->stopped == 0)
 		printf("%ld %d %s\n", get_time_fn() - sim->start_time, id, msg);
-	pthread_mutex_unlock(&sim->state_lock);
+	// pthread_mutex_unlock(&sim->state_lock);
 	pthread_mutex_unlock(&sim->log_lock);
 }
 

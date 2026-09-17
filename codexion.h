@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 18:10:52 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 20:10:25 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@
 
 typedef struct s_simulation t_simulation;
 
+typedef struct s_heap
+{
+	int	*data;
+	int	size;
+	int	capacity;
+}	t_heap;
+
 // struct timeval	time;
 typedef struct t_codexion
 {
@@ -37,6 +44,7 @@ typedef struct t_codexion
 	long	dongle_cooldown;
 	int		sheduler;
 }			t_args;
+
 typedef struct s_time
 {
 	struct timespec	time;
@@ -49,6 +57,7 @@ typedef struct s_dongle
 	int				dongle_id;
 	int				is_held;
 	long			available_at_ms;
+	t_heap			*heap;
 }	t_dongle;
 
 typedef struct s_coder
@@ -79,16 +88,8 @@ typedef	struct s_simulation
 	pthread_mutex_t	thread_creation_mutex;
 	pthread_mutex_t	log_lock;
 	int				threads_created;
-	t_heap			*heap;
 }	t_simulation;
 
-//heap
-typedef struct s_heap
-{
-	int	*data;
-	int	size;
-	int	capacity;
-}	t_heap;
 
 void	heap_init(t_heap *h, int capacity);
 int		heap_insert(t_heap *h, int value);

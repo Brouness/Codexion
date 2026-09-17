@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:56 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 18:17:52 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 21:11:56 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ static int validate_sim(t_dongle *first, t_dongle *second, t_coder *thread)
 {
 	int	validate;
 
-	if (acquire_dongle(first, thread))
+	if (acquire_dongle(first, thread) || acquire_dongle(second, thread))
 		return (-1);
-	else if (acquire_dongle(second, thread))
-	{
-		release_dongle(first, thread->sim->infos->dongle_cooldown);
-		return (-1);
-	}
+	// if ()
+	// {
+	// 	release_dongle(first, thread->sim->infos->dongle_cooldown);
+	// 	return (-1);
+	// }
 	validate = approve_log(thread, first, second);
 	if (validate)
 	{
@@ -51,8 +51,8 @@ static int validate_sim(t_dongle *first, t_dongle *second, t_coder *thread)
 
 void	*couder_routine(void *args)
 {
-	t_coder *thread;
-	int		number_of_compile;
+	t_coder 	*thread;
+	int			number_of_compile;
 	t_dongle	*first;
 	t_dongle	*second;
 

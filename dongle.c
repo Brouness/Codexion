@@ -6,21 +6,11 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/09 15:35:11 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 21:06:17 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "codexion.h"
-
-// struct timespec get_time_spec(void)
-// {
-//     struct  timeval     timeval_;
-//     struct  timespec    timespec_;
-
-//     gettimeofday(&timeval_, NULL);
-//     timespec_.tv_nsec = timeval_.tv_sec * 1000000;
-//     timespec_.tv_sec = timeval_.tv_usec * 1000;
-//     return timespec_;
-// }
 
 int	acquire_dongle(t_dongle *dongle, t_coder *thread)
 {
