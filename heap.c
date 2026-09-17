@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 08:22:28 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 09:00:05 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef struct s_heap
 
 void	heap_init(t_heap *h, int capacity)
 {
-	h->size = capacity;
-	h->data = malloc(sizeof(int) * capacity);
+	h->size = 0;
+	h->data = (int*)malloc(sizeof(int) * capacity);
 	h->capacity = capacity;
 }
 
@@ -31,8 +31,8 @@ void	swap(int *shild, int *parent)
 	int	*tmp;
 
 	tmp = parent;
-	parent = shild;
-	shild = tmp;
+	*parent = *shild;
+	*shild =  *tmp;
 }
 
 void	heap_insert(t_heap *h, int value)
@@ -40,14 +40,15 @@ void	heap_insert(t_heap *h, int value)
 	int	i;
 	int	parent;
 
-	i = h->size - 1;
+	i = h->size;
 	h->data[i] = value;
+	h->size++;
 	while (i > 0)
 	{
-		parent = (i + 1) / 2;
+		parent = (i - 1) / 2;
 		if (h->data[i] < h->data[parent])
 			swap(&h->data[i], &h->data[parent]);
-		i = (i + 1) / 2;
+		i = (i - 1) / 2;
 	}
 }
 
@@ -92,7 +93,7 @@ void	heap_destroy(t_heap *h)
 int main()
 {
 	int i = 0;
-	t_heap *heap;
+	t_heap *heap = (t_heap *)malloc(sizeof(t_heap));;
 	heap_init(heap, 6);
 	while (i++ < 6)
 		heap_insert(heap, i + 10);
