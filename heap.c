@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 08:11:24 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 08:22:28 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ void	swap(int *shild, int *parent)
 void	heap_insert(t_heap *h, int value)
 {
 	int	i;
-	int	*parent;
+	int	parent;
 
 	i = h->size - 1;
 	h->data[i] = value;
 	while (i > 0)
 	{
-		parent = &h->data[(i + 1) / 2];
-		if (h->data[i] < *parent)
-			swap(&h->data[i], parent);
+		parent = (i + 1) / 2;
+		if (h->data[i] < h->data[parent])
+			swap(&h->data[i], &h->data[parent]);
 		i = (i + 1) / 2;
 	}
 }
