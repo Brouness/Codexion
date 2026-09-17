@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 15:19:22 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 18:13:52 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,14 @@ t_simulation	*init_simulation(t_args *args)
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 		return (NULL);
+	if (!(sim->heap = scheduler_init(sim)))
+	{
+		free(sim);
+		return (NULL);
+	}
 	if (-1 == (sim->start_time = get_time_fn()))
 	{
+		free(sim->heap);
 		free(sim);
 		return (NULL);
 	}
@@ -113,17 +119,20 @@ t_simulation	*init_simulation(t_args *args)
 	sim->stopped = 0;
 	if (0 != pthread_mutex_init(&sim->thread_creation_mutex, NULL))
 	{
+		free(sim->heap);
 		free(sim);
 		return (NULL);
 	}
 	if (0 != pthread_cond_init(&sim->thread_creation_cond, NULL))
 	{
+		free(sim->heap);
 		pthread_mutex_destroy(&sim->thread_creation_mutex);
 		free(sim);
 		return (NULL);
 	}
 	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
 	{
+		free(sim->heap);
 		pthread_mutex_destroy(&sim->thread_creation_mutex);
 		pthread_cond_destroy(&sim->thread_creation_cond);
 		free(sim);
@@ -131,12 +140,14 @@ t_simulation	*init_simulation(t_args *args)
 	}
 	if (0 != pthread_cond_init(&sim->state_cond, NULL))
 	{
+		free(sim->heap);
 		pthread_mutex_destroy(&sim->log_lock);
 		free(sim);
 		return (NULL);
 	}
 	if (0 != pthread_mutex_init(&sim->state_lock, NULL))
 	{
+		free(sim->heap);
 		pthread_mutex_destroy(&sim->log_lock);
 		pthread_cond_destroy(&sim->state_cond);
 		free(sim);

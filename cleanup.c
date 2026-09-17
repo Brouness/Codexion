@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:53 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/16 12:54:49 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 18:14:09 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void    destroy_simulation(t_simulation *sim)
     pthread_mutex_destroy(&sim->log_lock);
     pthread_mutex_destroy(&sim->state_lock);
     pthread_cond_destroy(&sim->state_cond);
+    free(sim->heap);
     free(sim);
     return ;
 }

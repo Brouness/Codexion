@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 15:19:00 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 18:15:58 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static int	start_simulation(t_args *args)
 		}
 		i++;
 	}
-
 	destroy_simulation(sim);
 	return (0);
 }
