@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/16 16:59:14 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:19:00 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	main(int ac, char **av)
 		printf("Invalid number of arguments\n");
 	else
 	{
-		printf("dfhdsjg");
 		if (parse_args(av, &args))
 		{
 			printf("invalid arguments\n");

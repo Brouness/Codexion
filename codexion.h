@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 18:41:19 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 16:31:30 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,19 @@ typedef	struct s_simulation
 	pthread_mutex_t	log_lock;
 	int				threads_created;
 }	t_simulation;
+
+//heap
+typedef struct s_heap
+{
+	int	*data;
+	int	size;
+	int	capacity;
+}	t_heap;
+
+void	heap_init(t_heap *h, int capacity);
+int		heap_insert(t_heap *h, int value);
+int		heap_extract_min(t_heap *h, int	*out);
+void	heap_destroy(t_heap *h);
 
 //init all
 t_simulation	*init_simulation(t_args *args);

@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/16 12:22:14 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:19:22 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ t_simulation	*init_simulation(t_args *args)
 		free(sim);
 		return (NULL);
 	}
-	printf("fhighfdkjg");
 	sim->infos = args;
 	sim->threads_created = 0;
 	sim->stopped = 0;
