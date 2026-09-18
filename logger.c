@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:19 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 21:17:30 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:04:37 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	log_monitor_message(t_simulation *sim, int id, char *msg)
 	pthread_mutex_unlock(&sim->log_lock);
 }
 
-static int  checker(t_simulation *sim)
+int	checker(t_simulation *sim)
 {
 	pthread_mutex_lock(&sim->state_lock);
 	if (sim->stopped)

@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 16:31:54 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:00:22 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int	heap_insert(t_heap *h, int value)
 int	heap_extract_min(t_heap *h, int	*out)
 {
 	int	i;
+	int	left_child;
+	int	right_child;
+	int smallest;
 
 	if (h->size == 0 || h->capacity == 0)
 		return (-1);
@@ -62,19 +65,17 @@ int	heap_extract_min(t_heap *h, int	*out)
 	h->data[0] = h->data[h->size];
 	while (1)
 	{
-		if ((i * 2) + 1 < h->size && h->data[i] > h->data[(i * 2) + 1])
-		{
-			swap(&h->data[i], &h->data[(i * 2) + 1]);
-			i = (i * 2) + 1;
-		}
-		if ((i * 2) + 2 < h->size && h->data[i] > h->data[(i * 2) + 2])
-		{
-			swap(&h->data[i], &h->data[(i * 2) + 2]);
-			i = (i * 2) + 2;
-		}
-		if (!((i * 2) + 1 < h->size && h->data[i] > h->data[(i * 2) + 1]) &&
-		 !((i * 2) + 2 < h->size && h->data[i] > h->data[(i * 2) + 2]))
+		left_child = (i * 2) + 1;
+		right_child = (i * 2) + 2;
+		smallest = i;
+		if (left_child < h->size && h->data[smallest] > h->data[left_child])
+			smallest = left_child;
+		if (right_child < h->size && h->data[smallest] > h->data[right_child])
+			smallest = right_child;
+		if (smallest == i)
 			break;
+		swap(&h->data[i], &h->data[smallest]);
+		i = smallest;
 	}
 	return (*out);
 }

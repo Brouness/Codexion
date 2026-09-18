@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:56 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 21:11:56 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:08:06 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int validate_sim(t_dongle *first, t_dongle *second, t_coder *thread)
 {
 	int	validate;
 
-	if (acquire_dongle(first, thread) || acquire_dongle(second, thread))
+	if (acquire_dongle(first, thread, second) || acquire_dongle(second, thread, first))
 		return (-1);
 	// if ()
 	// {

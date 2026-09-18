@@ -6,27 +6,24 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 21:06:17 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:06:34 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	acquire_dongle(t_dongle *dongle, t_coder *thread)
+int	acquire_dongle(t_dongle *dongle, t_coder *thread, t_dongle *s_dongle)
 {
 	struct timespec deadline;
 
 	pthread_mutex_lock(&dongle->dongle_mut);
 	while (dongle->is_held == 1 || get_time_fn() < dongle->available_at_ms)
 	{
-		pthread_mutex_lock(&thread->sim->state_lock);
-		if (thread->sim->stopped)
+		if (checker(thread->sim))
 		{
-			pthread_mutex_unlock(&thread->sim->state_lock);
 			pthread_mutex_unlock(&dongle->dongle_mut);
 			return (-1);
 		}
-		pthread_mutex_unlock(&thread->sim->state_lock);
 		if (dongle->is_held == 1)
 			pthread_cond_wait(&dongle->con_var, &dongle->dongle_mut);
 		else

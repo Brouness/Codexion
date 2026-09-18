@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 20:10:25 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:07:04 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int		parse_args(char **s, t_args *n);
 long	get_time_fn(void);
 
 //dongles utils
-int		acquire_dongle(t_dongle *dongle, t_coder *thread);
+int		acquire_dongle(t_dongle *dongle, t_coder *thread, t_dongle *s_dongle);
 void    release_dongle(t_dongle *dongle, long cooldown_ms);
 
 //log helpers
@@ -123,5 +123,7 @@ void    *monitor_routine(void *args);
 
 //time utils
 int		interruptible_sleep(t_simulation *sim, long duration_ms);
+
+int	checker(t_simulation *sim);
 
 #endif
