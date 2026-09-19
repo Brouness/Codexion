@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 19:09:38 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 22:39:42 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	acquire_dongle(t_dongle *f_dongle, t_dongle *s_dongle, t_coder *coder)
 	if (coder->sim->wait_queue->size > 0 || f_dongle->is_held || s_dongle->is_held)
 	{
 		heap_insert(coder->sim->wait_queue, node);
-		while(f_dongle->is_held || !s_dongle->is_held)
+		while(f_dongle->is_held || s_dongle->is_held)
 		{
 			pthread_cond_wait(&coder->personal_cond, &coder->sim->wait_queue->queue_mut);
 			if (checker(coder->sim))
