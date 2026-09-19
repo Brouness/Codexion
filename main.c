@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 10:52:56 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 17:13:41 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ static int	join_my_threads(t_simulation *sim)
 static int	start_simulation(t_args *args)
 {
 	t_simulation	*sim;
-	int				i;
 
-	i = 0;
 	sim = init_simulation(args);
 	if (!sim)
 		return (-1);

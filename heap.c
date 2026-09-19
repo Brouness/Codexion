@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 10:42:24 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 17:34:58 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	heap_extract_min(t_heap *h, t_queue_node *node)
 		l = (i * 2) + 1;
 		r = (i * 2) + 2;
 		s = i;
-		if (l < h->size && h->queue[s].priority_s > h->queue[l].priority_s)
+		if (l < h->size && h->queue[s].priority_s < h->queue[l].priority_s)
 			s = l;
-		if (r < h->size && h->queue[s].priority_s > h->queue[r].priority_s)
+		if (r < h->size && h->queue[s].priority_s < h->queue[r].priority_s)
 			s = r;
 		if (s == i)
 			break ;

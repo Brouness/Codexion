@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:19 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/18 21:30:30 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 18:06:25 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 void	log_message(t_simulation *sim, int id, char *msg)
 {
-	// pthread_mutex_lock(&sim->state_lock);
 	pthread_mutex_lock(&sim->log_lock);
-	// if (sim->stopped == 0)
 	printf("%ld %d %s\n", get_time_fn() - sim->start_time, id, msg);
-	// pthread_mutex_unlock(&sim->state_lock);
 	pthread_mutex_unlock(&sim->log_lock);
 }
 
@@ -41,16 +38,13 @@ int	checker(t_simulation *sim)
 	return (0);
 }
 
-int approve_log(t_coder *thread, t_dongle *first, t_dongle *second)
+int	approve_log(t_coder *thread, t_dongle *f, t_dongle *s)
 {
-	int		id;
-
-	id = thread->id;
 	if (checker(thread->sim))
 		return (-1);
-	log_message(thread->sim, id, "has taken a dongle");
-	log_message(thread->sim, id, "has taken a dongle");
-	log_message(thread->sim, id, "is compiling");
+	log_message(thread->sim, thread->id, "has taken a dongle");
+	log_message(thread->sim, thread->id, "has taken a dongle");
+	log_message(thread->sim, thread->id, "is compiling");
 	pthread_mutex_lock(&thread->sim->state_lock);
 	thread->last_compile_start = get_time_fn();
 	pthread_mutex_unlock(&thread->sim->state_lock);
@@ -58,15 +52,15 @@ int approve_log(t_coder *thread, t_dongle *first, t_dongle *second)
 		return (-1);
 	if (checker(thread->sim))
 		return (-1);
-	release_dongle(thread->sim, first, second, thread->sim->infos->dongle_cooldown);
-	log_message(thread->sim, id, "is debugging");
+	release_dongle(thread->sim, f, s, thread->sim->infos->dongle_cooldown);
+	log_message(thread->sim, thread->id, "is debugging");
 	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_debug))
 		return (-2);
 	if (checker(thread->sim))
 		return (-2);
-	log_message(thread->sim, id, "is refactoring");
-		pthread_mutex_lock(&thread->sim->state_lock);
-		thread->compile_done++;
+	log_message(thread->sim, thread->id, "is refactoring");
+	pthread_mutex_lock(&thread->sim->state_lock);
+	thread->compile_done++;
 	pthread_mutex_unlock(&thread->sim->state_lock);
 	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_refactor))
 		return (-2);

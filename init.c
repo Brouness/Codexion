@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 11:41:37 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 17:42:22 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,10 @@ int	init_dongles(t_simulation *sim)
 		sim->dongles[i].is_held = 0;
 		sim->dongles[i].dongle_id = i + 1;
 		sim->dongles[i].available_at_ms = 0;
-		if (pthread_mutex_init(&sim->dongles[i].dongle_mut, NULL) != 0)
-			break ;
-		if (pthread_cond_init(&sim->dongles[i].con_var, NULL) != 0)
-		{
-			pthread_mutex_destroy(&sim->dongles[i].dongle_mut);
-			break ;
-		}
 		i++;
 	}
 	if (i < sim->infos->number_of_coders)
 	{
-		while (i-- > 0)
-		{
-			pthread_mutex_destroy(&sim->dongles[i].dongle_mut);
-			pthread_cond_destroy(&sim->dongles[i].con_var);
-		}
 		free(sim->dongles);
 		sim->dongles = NULL;
 		return (-1);
@@ -98,6 +86,45 @@ int	init_simulation_objects(t_simulation *sim)
 	return (0);
 }
 
+static int init_all(t_simulation *sim)
+{
+	if (0 != pthread_mutex_init(&sim->thread_creation_mutex, NULL))
+	{
+		free(sim->wait_queue->queue);
+		free(sim->wait_queue);
+		free(sim);
+		return (-1);
+	}
+	if (0 != pthread_cond_init(&sim->thread_creation_cond, NULL))
+	{
+		pthread_mutex_destroy(&sim->thread_creation_mutex);
+		free(sim);
+		return (-1);
+	}
+	pthread_mutex_init(&sim->wait_queue->queue_mut, NULL);
+	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
+	{
+		pthread_mutex_destroy(&sim->thread_creation_mutex);
+		pthread_cond_destroy(&sim->thread_creation_cond);
+		free(sim);
+		return (-1);
+	}
+	if (0 != pthread_cond_init(&sim->state_cond, NULL))
+	{
+		pthread_mutex_destroy(&sim->log_lock);
+		free(sim);
+		return (-1);
+	}
+	if (0 != pthread_mutex_init(&sim->state_lock, NULL))
+	{
+		pthread_mutex_destroy(&sim->log_lock);
+		pthread_cond_destroy(&sim->state_cond);
+		free(sim);
+		return (-1);
+	}
+	return (0);
+}
+
 t_simulation	*init_simulation(t_args *args)
 {
 	t_simulation	*sim;
@@ -114,40 +141,8 @@ t_simulation	*init_simulation(t_args *args)
 	sim->threads_created = 0;
 	sim->stopped = 0;
 	sim->wait_queue = heap_init(sim->infos->number_of_coders);
-	if (0 != pthread_mutex_init(&sim->thread_creation_mutex, NULL))
-	{
-		free(sim->wait_queue->queue);
-		free(sim->wait_queue);
-		free(sim);
+	if (init_all(sim))
 		return (NULL);
-	}
-	if (0 != pthread_cond_init(&sim->thread_creation_cond, NULL))
-	{
-		pthread_mutex_destroy(&sim->thread_creation_mutex);
-		free(sim);
-		return (NULL);
-	}
-	pthread_mutex_init(&sim->wait_queue->queue_mut, NULL);
-	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
-	{
-		pthread_mutex_destroy(&sim->thread_creation_mutex);
-		pthread_cond_destroy(&sim->thread_creation_cond);
-		free(sim);
-		return (NULL);
-	}
-	if (0 != pthread_cond_init(&sim->state_cond, NULL))
-	{
-		pthread_mutex_destroy(&sim->log_lock);
-		free(sim);
-		return (NULL);
-	}
-	if (0 != pthread_mutex_init(&sim->state_lock, NULL))
-	{
-		pthread_mutex_destroy(&sim->log_lock);
-		pthread_cond_destroy(&sim->state_cond);
-		free(sim);
-		return (NULL);
-	}
 	if (init_simulation_objects(sim))
 		return (NULL);
 	return (sim);

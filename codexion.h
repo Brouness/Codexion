@@ -6,24 +6,24 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 14:47:31 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 19:06:28 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 # define SCHEDULER_FIFO 0
 # define SCHEDULER_EDF 1
 
-typedef struct s_simulation t_simulation;
+typedef struct s_simulation	t_simulation;
 
 typedef struct s_queue_node
 {
@@ -55,31 +55,32 @@ typedef struct t_codexion
 typedef struct s_time
 {
 	struct timespec	time;
-} t_time;
+}					t_time;
 
 typedef struct s_dongle
 {
 	int				dongle_id;
 	int				is_held;
 	long			available_at_ms;
+	t_heap			*heap;
 }	t_dongle;
 
 typedef struct s_coder
 {
-	int				id;
-	t_dongle		*left_dongle;
-	t_dongle		*right_dongle;
 	pthread_t		thread;
-	pthread_mutex_t	last_compile_start_mut;
-	long			last_compile_start;
-	int				compile_done;
+	pthread_cond_t	personal_cond;
 	pthread_cond_t	thread_creation_cond;
 	pthread_mutex_t	thread_creation_mutex;
+	pthread_mutex_t	last_compile_start_mut;
+	t_dongle		*right_dongle;
+	t_dongle		*left_dongle;
+	long			last_compile_start;
+	int				compile_done;
+	int				id;
 	t_simulation	*sim;
-	pthread_cond_t	personal_cond;
 }	t_coder;
 
-typedef	struct s_simulation
+typedef struct s_simulation
 {
 	t_args			*infos;
 	t_coder			*coders;
@@ -96,7 +97,6 @@ typedef	struct s_simulation
 	t_heap			*wait_queue;
 }	t_simulation;
 
-//heap helpers
 t_heap			*heap_init(int capacity);
 int				heap_insert(t_heap *h, t_queue_node node);
 void			heap_extract_min(t_heap *h, t_queue_node *node);
@@ -110,24 +110,27 @@ int				init_coders(t_simulation *sim);
 //clean memory
 void			destroy_simulation(t_simulation *sim);
 void			*couder_routine(void *args);
-int 			validate_arguments(char *s);
+int				validate_arguments(char *s);
 int				parse_args(char **s, t_args *n);
 long			get_time_fn(void);
 
 //dongles utils
-int				acquire_dongle(t_dongle *f_dongle, t_dongle *s_dongle, t_coder *coder);
-void			release_dongle(t_simulation *sim, t_dongle *f_dongle, t_dongle *s_dongle, long cooldown_ms);
+int				acquire_dongle(t_dongle *f_dongle,
+					t_dongle *s_dongle, t_coder *coder);
+void			release_dongle(t_simulation *sim, t_dongle *f_dongle,
+					t_dongle *s_dongle, long cooldown_ms);
 
 //log helpers
 void			log_message(t_simulation *sim, int id, char *msg);
 void			log_monitor_message(t_simulation *sim, int id, char *msg);
-int 			approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
+int				approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 
 //monitor
 void			*monitor_routine(void *args);
 
 //time utils
-int			interruptible_sleep(t_simulation *sim, long duration_ms);
-int			checker(t_simulation *sim);
+int				interruptible_sleep(t_simulation *sim, long duration_ms);
+
+int				checker(t_simulation *sim);
 
 #endif
