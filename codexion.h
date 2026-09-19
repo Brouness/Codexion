@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 20:03:53 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 23:30:35 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,5 @@ void			*monitor_routine(void *args);
 int				interruptible_sleep(t_simulation *sim, long duration_ms);
 
 int				checker(t_simulation *sim);
-
+void heap_remove_by_id(t_heap *h, int coder_id);
 #endif
