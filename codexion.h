@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 19:06:28 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 20:03:53 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int				init_coders(t_simulation *sim);
 
 //clean memory
 void			destroy_simulation(t_simulation *sim);
+void			free_malloc(t_simulation *sim);
 void			*couder_routine(void *args);
 int				validate_arguments(char *s);
 int				parse_args(char **s, t_args *n);

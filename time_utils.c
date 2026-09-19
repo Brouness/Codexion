@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:31 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 18:56:16 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 19:59:25 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,15 @@ int	interruptible_sleep(t_simulation *sim, long duration_ms)
 	if (was_stopped)
 		return (-1);
 	return (0);
+}
+
+long	get_time_fn(void)
+{
+	struct timeval	time;
+	long			curent_time;
+
+	if (gettimeofday(&time, NULL))
+		return (-1);
+	curent_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (curent_time);
 }

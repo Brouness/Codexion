@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 17:19:36 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 19:09:38 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	acquire_dongle(t_dongle *f_dongle, t_dongle *s_dongle, t_coder *coder)
 	long			max_available;
 	long			cur_time;
 	long			priority;
-	long            wait_cooldown;
+	long			wait_cooldown;
 	t_queue_node	node;
 	long			last_compile;
 

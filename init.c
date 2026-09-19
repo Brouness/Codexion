@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 17:42:22 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 20:09:03 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,6 @@ int	init_coders(t_simulation *sim)
 	return (0);
 }
 
-long	get_time_fn(void)
-{
-	struct timeval	time;
-	long			curent_time;
-
-	if (gettimeofday(&time, NULL))
-		return (-1);
-	curent_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-	return (curent_time);
-}
 int	init_simulation_objects(t_simulation *sim)
 {
 	if (init_dongles(sim))
@@ -86,40 +76,26 @@ int	init_simulation_objects(t_simulation *sim)
 	return (0);
 }
 
-static int init_all(t_simulation *sim)
+static int	init_all(t_simulation *sim)
 {
-	if (0 != pthread_mutex_init(&sim->thread_creation_mutex, NULL))
+	if (pthread_mutex_init(&sim->thread_creation_mutex, NULL))
 	{
-		free(sim->wait_queue->queue);
-		free(sim->wait_queue);
-		free(sim);
+		free_malloc(sim);
 		return (-1);
 	}
-	if (0 != pthread_cond_init(&sim->thread_creation_cond, NULL))
+	if (pthread_cond_init(&sim->thread_creation_cond, NULL))
 	{
-		pthread_mutex_destroy(&sim->thread_creation_mutex);
-		free(sim);
+		destroy_simulation(sim);
 		return (-1);
 	}
-	pthread_mutex_init(&sim->wait_queue->queue_mut, NULL);
-	if (0 != pthread_mutex_init(&sim->log_lock, NULL))
+	if (pthread_mutex_init(&sim->log_lock, NULL) || pthread_mutex_init(&sim->wait_queue->queue_mut, NULL))
 	{
-		pthread_mutex_destroy(&sim->thread_creation_mutex);
-		pthread_cond_destroy(&sim->thread_creation_cond);
-		free(sim);
+		destroy_simulation(sim);
 		return (-1);
 	}
-	if (0 != pthread_cond_init(&sim->state_cond, NULL))
+	if (pthread_cond_init(&sim->state_cond, NULL) || pthread_mutex_init(&sim->state_lock, NULL))
 	{
-		pthread_mutex_destroy(&sim->log_lock);
-		free(sim);
-		return (-1);
-	}
-	if (0 != pthread_mutex_init(&sim->state_lock, NULL))
-	{
-		pthread_mutex_destroy(&sim->log_lock);
-		pthread_cond_destroy(&sim->state_cond);
-		free(sim);
+		destroy_simulation(sim);
 		return (-1);
 	}
 	return (0);
@@ -132,7 +108,8 @@ t_simulation	*init_simulation(t_args *args)
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 		return (NULL);
-	if (-1 == (sim->start_time = get_time_fn()))
+	sim->start_time = get_time_fn();
+	if (-1 == (sim->start_time))
 	{
 		free(sim);
 		return (NULL);
