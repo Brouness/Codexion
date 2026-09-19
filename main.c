@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 20:50:09 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 10:52:56 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	threads_creation(t_simulation *sim)
 	i = 0;
 	while (i < sim->infos->number_of_coders)
 	{
-		if (pthread_create(&sim->coders[i].thread, NULL, couder_routine, &sim->coders[i]))
+		if (pthread_create(&sim->coders[i].thread, NULL,
+				couder_routine, &sim->coders[i]))
 		{
 			destroy_simulation(sim);
 			return (-1);
@@ -30,6 +31,28 @@ static int	threads_creation(t_simulation *sim)
 	{
 		destroy_simulation(sim);
 		return (-1);
+	}
+	return (0);
+}
+
+static int	join_my_threads(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	if (pthread_join(sim->monitor_thread, NULL))
+	{
+		destroy_simulation(sim);
+		return (-1);
+	}
+	while (i < sim->infos->number_of_coders)
+	{
+		if (pthread_join(sim->coders[i].thread, NULL))
+		{
+			destroy_simulation(sim);
+			return (-1);
+		}
+		i++;
 	}
 	return (0);
 }
@@ -49,30 +72,18 @@ static int	start_simulation(t_args *args)
 	sim->threads_created = 1;
 	pthread_cond_broadcast(&sim->thread_creation_cond);
 	pthread_mutex_unlock(&sim->thread_creation_mutex);
-	i = 0;
-	if (pthread_join(sim->monitor_thread, NULL))
-	{
-		destroy_simulation(sim);
+	if (join_my_threads(sim))
 		return (-1);
-	}
-	while(i < sim->infos->number_of_coders)
-	{
-		if (pthread_join(sim->coders[i].thread, NULL))
-		{
-			destroy_simulation(sim);
-			return (-1);
-		}
-		i++;
-	}
 	destroy_simulation(sim);
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	int				i;
 	t_args			args;
-	i = 0;
+	char			*err;
+
+	err = "something went wrong in your machine my code is goddeam good :)\n";
 	if (ac != 9)
 		printf("Invalid number of arguments\n");
 	else
@@ -84,7 +95,7 @@ int	main(int ac, char **av)
 		}
 		if (start_simulation(&args))
 		{
-			printf("something went wrong in your machine my code is goddeam good :)\n");
+			printf("%s", err);
 			return (-1);
 		}
 	}

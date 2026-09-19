@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/18 11:07:04 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 14:47:31 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,18 @@
 
 typedef struct s_simulation t_simulation;
 
+typedef struct s_queue_node
+{
+	int	coder_id;
+	int	priority_s;
+}	t_queue_node;
+
 typedef struct s_heap
 {
-	int	*data;
-	int	size;
-	int	capacity;
+	pthread_mutex_t	queue_mut;
+	t_queue_node	*queue;
+	int				size;
+	int				capacity;
 }	t_heap;
 
 // struct timeval	time;
@@ -52,12 +59,9 @@ typedef struct s_time
 
 typedef struct s_dongle
 {
-	pthread_mutex_t	dongle_mut;
-	pthread_cond_t	con_var;
 	int				dongle_id;
 	int				is_held;
 	long			available_at_ms;
-	t_heap			*heap;
 }	t_dongle;
 
 typedef struct s_coder
@@ -72,6 +76,7 @@ typedef struct s_coder
 	pthread_cond_t	thread_creation_cond;
 	pthread_mutex_t	thread_creation_mutex;
 	t_simulation	*sim;
+	pthread_cond_t	personal_cond;
 }	t_coder;
 
 typedef	struct s_simulation
@@ -88,14 +93,14 @@ typedef	struct s_simulation
 	pthread_mutex_t	thread_creation_mutex;
 	pthread_mutex_t	log_lock;
 	int				threads_created;
+	t_heap			*wait_queue;
 }	t_simulation;
 
-
-void	heap_init(t_heap *h, int capacity);
-int		heap_insert(t_heap *h, int value);
-int		heap_extract_min(t_heap *h, int	*out);
-void	heap_destroy(t_heap *h);
-t_heap	*scheduler_init(t_simulation *sim);
+//heap helpers
+t_heap			*heap_init(int capacity);
+int				heap_insert(t_heap *h, t_queue_node node);
+void			heap_extract_min(t_heap *h, t_queue_node *node);
+void			heap_destroy(t_heap *h);
 
 //init all
 t_simulation	*init_simulation(t_args *args);
@@ -103,27 +108,26 @@ int				init_dongles(t_simulation *sim);
 int				init_coders(t_simulation *sim);
 
 //clean memory
-void	destroy_simulation(t_simulation *sim);
-void	*couder_routine(void *args);
-int 	validate_arguments(char *s);
-int		parse_args(char **s, t_args *n);
-long	get_time_fn(void);
+void			destroy_simulation(t_simulation *sim);
+void			*couder_routine(void *args);
+int 			validate_arguments(char *s);
+int				parse_args(char **s, t_args *n);
+long			get_time_fn(void);
 
 //dongles utils
-int		acquire_dongle(t_dongle *dongle, t_coder *thread, t_dongle *s_dongle);
-void    release_dongle(t_dongle *dongle, long cooldown_ms);
+int				acquire_dongle(t_dongle *f_dongle, t_dongle *s_dongle, t_coder *coder);
+void			release_dongle(t_simulation *sim, t_dongle *f_dongle, t_dongle *s_dongle, long cooldown_ms);
 
 //log helpers
-void    log_message(t_simulation *sim, int id, char *msg);
-void    log_monitor_message(t_simulation *sim, int id, char *msg);
-int approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
+void			log_message(t_simulation *sim, int id, char *msg);
+void			log_monitor_message(t_simulation *sim, int id, char *msg);
+int 			approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 
 //monitor
-void    *monitor_routine(void *args);
+void			*monitor_routine(void *args);
 
 //time utils
-int		interruptible_sleep(t_simulation *sim, long duration_ms);
-
-int	checker(t_simulation *sim);
+int			interruptible_sleep(t_simulation *sim, long duration_ms);
+int			checker(t_simulation *sim);
 
 #endif

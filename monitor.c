@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:26 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/17 21:44:57 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/19 10:25:46 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ static  void    wake_dongles(t_simulation *sim)
 	int i;
 
 	i = 0;
+	pthread_mutex_lock(&sim->wait_queue->queue_mut);
 	while(i < sim->infos->number_of_coders)
 	{
-		pthread_mutex_lock(&sim->dongles[i].dongle_mut);
-		pthread_cond_broadcast(&sim->dongles[i].con_var);
-		pthread_mutex_unlock(&sim->dongles[i].dongle_mut);
+		pthread_cond_broadcast(&sim->coders[i].personal_cond);
 		i++;
 	}
+	pthread_mutex_unlock(&sim->wait_queue->queue_mut);
 }
 
-void    *monitor_routine(void *args)
+void	*monitor_routine(void *args)
 {
-	t_simulation    *sim;
-	int             i;
-	int             all_done;
+	t_simulation	*sim;
+	int				i;
+	int				all_done;
 
 	sim = (t_simulation *) args;
 	pthread_mutex_lock(&sim->thread_creation_mutex);
@@ -54,7 +54,7 @@ void    *monitor_routine(void *args)
 					pthread_cond_broadcast(&sim->state_cond);
 					pthread_mutex_unlock(&sim->state_lock);
 					wake_dongles(sim);
-					return NULL;
+					return (NULL);
 				}
 			}
 			i++;
@@ -68,7 +68,7 @@ void    *monitor_routine(void *args)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&sim->state_lock);
-		// usleep(1000);
+		usleep(1000);
 	}
 	return (NULL);
 }

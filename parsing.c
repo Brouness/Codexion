@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 16:29:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/07/10 18:44:45 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/18 21:57:43 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_numbers(char **s)
 	i = 1;
 	while (i < 8)
 	{
-		if (atol(s[i]) <= 0)
+		if (atol(s[i]) < 0)
 			return (1);
 		i++;
 	}
