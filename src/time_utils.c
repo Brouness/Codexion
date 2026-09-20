@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:31 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 19:59:25 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 11:58:49 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,22 @@ long	get_time_fn(void)
 		return (-1);
 	curent_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (curent_time);
+}
+
+t_heap	*heap_init(int capacity)
+{
+	t_heap	*h;
+
+	h = (t_heap *)malloc(sizeof(t_heap));
+	if (!h)
+		return (NULL);
+	h->queue = (t_queue_node *)malloc(sizeof(t_queue_node) * capacity);
+	if (!h->queue)
+	{
+		free(h);
+		return (NULL);
+	}
+	h->capacity = capacity;
+	h->size = 0;
+	return (h);
 }

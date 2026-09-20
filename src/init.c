@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 23:24:41 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 11:59:14 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,14 @@ static int	init_all(t_simulation *sim)
 		destroy_simulation(sim);
 		return (-1);
 	}
-	if (pthread_mutex_init(&sim->log_lock, NULL) || pthread_mutex_init(&sim->wait_queue->queue_mut, NULL))
+	if (pthread_mutex_init(&sim->log_lock, NULL)
+		|| pthread_mutex_init(&sim->wait_queue->queue_mut, NULL))
 	{
 		destroy_simulation(sim);
 		return (-1);
 	}
-	if (pthread_cond_init(&sim->state_cond, NULL) || pthread_mutex_init(&sim->state_lock, NULL))
+	if (pthread_cond_init(&sim->state_cond, NULL)
+		|| pthread_mutex_init(&sim->state_lock, NULL))
 	{
 		destroy_simulation(sim);
 		return (-1);

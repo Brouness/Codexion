@@ -6,29 +6,11 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 10:57:25 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 11:58:36 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-t_heap	*heap_init(int capacity)
-{
-	t_heap	*h;
-
-	h = (t_heap *)malloc(sizeof(t_heap));
-	if (!h)
-		return (NULL);
-	h->queue = (t_queue_node *)malloc(sizeof(t_queue_node) * capacity);
-	if (!h->queue)
-	{
-		free(h);
-		return (NULL);
-	}
-	h->capacity = capacity;
-	h->size = 0;
-	return (h);
-}
 
 static void	swap(t_queue_node *child, t_queue_node *parent)
 {

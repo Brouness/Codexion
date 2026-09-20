@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:56 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 10:52:41 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 12:01:11 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ static int	validate_sim(t_dongle *first, t_dongle *second, t_coder *thread)
 	return (0);
 }
 
-void    *couder_routine(void *args)
+void	*couder_routine(void *args)
 {
-	t_coder     *thread;
-	int         number_of_compile;
+	t_coder	*thread;
+	int		number_of_compile;
 
 	thread = (t_coder *) args;
 	pthread_mutex_lock(&thread->sim->thread_creation_mutex);
@@ -56,11 +56,8 @@ void    *couder_routine(void *args)
 		pthread_cond_wait(&thread->sim->thread_creation_cond,
 			&thread->sim->thread_creation_mutex);
 	pthread_mutex_unlock(&thread->sim->thread_creation_mutex);
-
-	// Stagger start with 1ms pause to prevent t=0 mutex contention
 	if (thread->id % 2 != 0)
 		interruptible_sleep(thread->sim, 1);
-
 	if (thread->left_dongle == thread->right_dongle)
 		return (NULL);
 	number_of_compile = 0;
@@ -73,4 +70,3 @@ void    *couder_routine(void *args)
 	}
 	return (NULL);
 }
-
