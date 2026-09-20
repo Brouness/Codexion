@@ -1,17 +1,17 @@
 NAME = codexion
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 
-SRC = cleanup.c\
-		coder.c\
-		dongle.c\
-		heap.c\
-		init.c\
-		logger.c\
-		main.c\
-		monitor.c\
-		parsing.c\
-		time_utils.c
+SRC = src/cleanup.c\
+		src/coder.c\
+		src/dongle.c\
+		src/heap.c\
+		src/init.c\
+		src/logger.c\
+		src/main.c\
+		src/monitor.c\
+		src/parsing.c\
+		src/utils.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -20,7 +20,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 
-%.o : %.c push_swap.h
+%.o : %.c codexion.h
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:

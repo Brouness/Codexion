@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 16:29:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 19:58:32 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 23:23:49 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	validate_arguments(char *s)
 		else
 			return (1);
 	}
+	if (i > 9)
+		return (-1);
 	return (0);
 }
 

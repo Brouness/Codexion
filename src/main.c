@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 19:59:46 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 23:18:39 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ int	main(int ac, char **av)
 
 	err = "something went wrong in your machine my code is goddeam good :)\n";
 	if (ac != 9)
-		printf("Invalid number of arguments\n");
+		fprintf(stderr, "Invalid number of arguments\n");
 	else
 	{
 		if (parse_args(av, &args))
 		{
-			printf("invalid arguments\n");
+			fprintf(stderr, "invalid arguments\n");
 			return (-1);
 		}
 		if (start_simulation(&args))
