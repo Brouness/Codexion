@@ -1,6 +1,6 @@
 NAME = codexion
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRC = src/cleanup.c\
 		src/coder.c\
