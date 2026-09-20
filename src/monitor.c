@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:26 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 22:47:20 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 15:53:42 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	*monitor_routine(void *args)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&sim->state_lock);
-		usleep(1000);
+		interruptible_sleep(sim, 1);
 	}
 	return (NULL);
 }

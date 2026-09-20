@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 20:23:33 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 19:59:46 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	threads_creation(t_simulation *sim)
 	while (i < sim->infos->number_of_coders)
 	{
 		if (pthread_create(&sim->coders[i].thread, NULL,
-				couder_routine, &sim->coders[i]))
+				coder_routine, &sim->coders[i]))
 		{
 			destroy_simulation(sim);
 			return (-1);
@@ -68,6 +68,7 @@ static int	start_simulation(t_args *args)
 		return (-1);
 	pthread_mutex_lock(&sim->thread_creation_mutex);
 	sim->threads_created = 1;
+	sim->start_time = get_time_fn();
 	pthread_cond_broadcast(&sim->thread_creation_cond);
 	pthread_mutex_unlock(&sim->thread_creation_mutex);
 	if (join_my_threads(sim))

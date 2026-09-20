@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 12:01:53 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 19:58:58 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ typedef struct s_simulation	t_simulation;
 
 typedef struct s_queue_node
 {
-	int	coder_id;
-	int	priority_s;
+	int		coder_id;
+	int		priority_s;
 }	t_queue_node;
 
 typedef struct s_heap
@@ -39,7 +39,6 @@ typedef struct s_heap
 	int				capacity;
 }	t_heap;
 
-// struct timeval	time;
 typedef struct t_codexion
 {
 	int		number_of_coders;
@@ -49,28 +48,20 @@ typedef struct t_codexion
 	long	time_to_refactor;
 	int		number_of_compiles_required;
 	long	dongle_cooldown;
-	int		sheduler;
+	int		scheduler;
 }			t_args;
-
-typedef struct s_time
-{
-	struct timespec	time;
-}					t_time;
 
 typedef struct s_dongle
 {
 	int				dongle_id;
 	int				is_held;
 	long			available_at_ms;
-	t_heap			*heap;
 }	t_dongle;
 
 typedef struct s_coder
 {
 	pthread_t		thread;
 	pthread_cond_t	personal_cond;
-	pthread_cond_t	thread_creation_cond;
-	pthread_mutex_t	thread_creation_mutex;
 	pthread_mutex_t	last_compile_start_mut;
 	t_dongle		*right_dongle;
 	t_dongle		*left_dongle;
@@ -110,7 +101,7 @@ int				init_coders(t_simulation *sim);
 //clean memory
 void			destroy_simulation(t_simulation *sim);
 void			free_malloc(t_simulation *sim);
-void			*couder_routine(void *args);
+void			*coder_routine(void *args);
 int				validate_arguments(char *s);
 int				parse_args(char **s, t_args *n);
 long			get_time_fn(void);

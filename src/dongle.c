@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 12:26:06 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 20:04:47 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ long	update_last_compile(t_coder *coder)
 	pthread_mutex_lock(&coder->last_compile_start_mut);
 	last_compile = coder->last_compile_start;
 	pthread_mutex_unlock(&coder->last_compile_start_mut);
-	if (coder->sim->infos->sheduler == SCHEDULER_FIFO)
+	if (coder->sim->infos->scheduler == SCHEDULER_FIFO)
 		priority = get_time_fn();
 	else
 		priority = last_compile + coder->sim->infos->time_to_burnout;

@@ -6,17 +6,25 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:19 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 18:06:25 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 20:05:35 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
 void	log_message(t_simulation *sim, int id, char *msg)
-{
+{	
+	pthread_mutex_lock(&sim->state_lock);
 	pthread_mutex_lock(&sim->log_lock);
+	if (sim->stopped)
+	{
+		pthread_mutex_unlock(&sim->log_lock);
+		pthread_mutex_unlock(&sim->state_lock);
+		return;
+	}
 	printf("%ld %d %s\n", get_time_fn() - sim->start_time, id, msg);
 	pthread_mutex_unlock(&sim->log_lock);
+	pthread_mutex_unlock(&sim->state_lock);
 }
 
 void	log_monitor_message(t_simulation *sim, int id, char *msg)

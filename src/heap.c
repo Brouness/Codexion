@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 19:42:24 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 11:58:36 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 19:01:50 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	heap_insert(t_heap *h, t_queue_node node)
 	while (i > 0)
 	{
 		parent = (i - 1) / 2;
-		if (h->queue[i].priority_s < h->queue[parent].priority_s)
+		if ((h->queue[i].priority_s < h->queue[parent].priority_s))
 			swap(&h->queue[i], &h->queue[parent]);
 		else
 			break ;

@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 16:29:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/19 22:51:20 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/20 19:58:32 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ int	parse_args(char **s, t_args *n)
 	n->number_of_compiles_required = atoi(s[6]);
 	n->dongle_cooldown = atol(s[7]);
 	if (!strcmp(s[i], "fifo"))
-		n->sheduler = SCHEDULER_FIFO;
+		n->scheduler = SCHEDULER_FIFO;
 	else
-		n->sheduler = SCHEDULER_EDF;
+		n->scheduler = SCHEDULER_EDF;
 	return (0);
 }
