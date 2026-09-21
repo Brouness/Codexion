@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:10 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 23:14:17 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 21:27:39 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	acquire_dongle(t_dongle *f_dongle, t_dongle *s_dongle, t_coder *coder)
 	pthread_mutex_lock(&coder->sim->wait_queue->queue_mut);
 	node.coder_id = coder->id;
 	node.priority_s = update_last_compile(coder);
+	node.coder = coder;
 	heap_insert(coder->sim->wait_queue, node);
 	while (f_dongle->is_held || s_dongle->is_held)
 	{

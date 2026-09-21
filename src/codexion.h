@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 19:58:58 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 21:24:30 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
 # define SCHEDULER_EDF 1
 
 typedef struct s_simulation	t_simulation;
+typedef struct s_coder		t_coder;
 
 typedef struct s_queue_node
 {
 	int		coder_id;
 	int		priority_s;
+	t_coder	*coder;
 }	t_queue_node;
 
 typedef struct s_heap
@@ -111,6 +113,7 @@ int				acquire_dongle(t_dongle *f_dongle,
 					t_dongle *s_dongle, t_coder *coder);
 void			release_dongle(t_simulation *sim, t_dongle *f_dongle,
 					t_dongle *s_dongle, long cooldown_ms);
+int				choose(t_queue_node *a, t_queue_node *b);
 
 //log helpers
 void			log_message(t_simulation *sim, int id, char *msg);

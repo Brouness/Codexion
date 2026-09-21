@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:31 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 22:37:50 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 21:24:05 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,13 @@ t_heap	*heap_init(int capacity)
 	h->capacity = capacity;
 	h->size = 0;
 	return (h);
+}
+
+int	choose(t_queue_node *a, t_queue_node *b)
+{
+	if (a->priority_s != b->priority_s)
+		return (a->priority_s < b->priority_s);
+	if (a->coder->compile_done != b->coder->compile_done)
+		return (a->coder->compile_done < b->coder->compile_done);
+	return (a->coder_id < b->coder_id);
 }
