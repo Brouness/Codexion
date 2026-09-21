@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:53 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/21 22:11:46 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 22:24:16 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	free_malloc(t_simulation *sim)
 	if (sim->coders)
 		free(sim->coders);
 	heap_destroy(sim->wait_queue);
-	free(sim->wait_queue);
 	free(sim);
 }
 
