@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:22 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 23:18:39 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 11:23:40 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	main(int ac, char **av)
 		}
 		if (start_simulation(&args))
 		{
-			printf("%s", err);
+			fprintf(stderr, "%s", err);
 			return (-1);
 		}
 	}
