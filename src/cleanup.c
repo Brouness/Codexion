@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:53 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 11:59:48 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 22:11:46 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ void	free_malloc(t_simulation *sim)
 	}
 	if (sim->coders)
 		free(sim->coders);
-	free(sim->wait_queue->queue);
+	heap_destroy(sim->wait_queue);
 	free(sim->wait_queue);
 	free(sim);
 }
 
 void	destroy_simulation(t_simulation *sim)
 {
-	pthread_mutex_destroy(&sim->thread_creation_mutex);
 	sim->stopped = 1;
 	sim->threads_created = 1;
+	pthread_mutex_destroy(&sim->thread_creation_mutex);
 	pthread_cond_broadcast(&sim->thread_creation_cond);
 	pthread_cond_destroy(&sim->thread_creation_cond);
 	pthread_mutex_destroy(&sim->log_lock);

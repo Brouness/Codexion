@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:15 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 19:02:45 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/21 22:18:31 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,11 @@ t_simulation	*init_simulation(t_args *args)
 	sim->threads_created = 0;
 	sim->stopped = 0;
 	sim->wait_queue = heap_init(sim->infos->number_of_coders);
+	if (!sim->wait_queue)
+	{
+		free_malloc(sim);
+		return (NULL);
+	}
 	if (init_all(sim))
 		return (NULL);
 	if (init_simulation_objects(sim))
