@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:19 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/21 21:42:06 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/22 12:14:54 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	approve_log(t_coder *thread, t_dongle *f, t_dongle *s)
 	log_message(thread->sim, thread->id, "has taken a dongle");
 	log_message(thread->sim, thread->id, "is compiling");
 	pthread_mutex_lock(&thread->sim->state_lock);
-	thread->compile_done++;
 	thread->last_compile_start = get_time_fn();
 	pthread_mutex_unlock(&thread->sim->state_lock);
 	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_compile))
@@ -68,6 +67,9 @@ int	approve_log(t_coder *thread, t_dongle *f, t_dongle *s)
 	if (checker(thread->sim))
 		return (-2);
 	log_message(thread->sim, thread->id, "is refactoring");
+	pthread_mutex_lock(&thread->sim->state_lock);
+	thread->compile_done++;
+	pthread_mutex_unlock(&thread->sim->state_lock);
 	if (interruptible_sleep(thread->sim, thread->sim->infos->time_to_refactor))
 		return (-2);
 	return (0);

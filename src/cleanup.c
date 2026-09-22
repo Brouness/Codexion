@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:34:53 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/21 22:24:16 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/22 11:59:10 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@ void	free_malloc(t_simulation *sim)
 	free(sim);
 }
 
+void	destroy_coders(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->infos->number_of_coders)
+	{
+		pthread_mutex_destroy(&sim->coders[i].last_compile_start_mut);
+		pthread_cond_destroy(&sim->coders[i].personal_cond);
+		i++;
+	}
+	return ;
+}
+
 void	destroy_simulation(t_simulation *sim)
 {
 	sim->stopped = 1;
@@ -35,6 +49,7 @@ void	destroy_simulation(t_simulation *sim)
 	pthread_mutex_destroy(&sim->state_lock);
 	pthread_cond_destroy(&sim->state_cond);
 	pthread_mutex_destroy(&sim->wait_queue->queue_mut);
+	destroy_coders(sim);
 	free_malloc(sim);
 	return ;
 }
