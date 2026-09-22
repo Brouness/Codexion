@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/21 21:24:30 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/22 11:54:22 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int				acquire_dongle(t_dongle *f_dongle,
 					t_dongle *s_dongle, t_coder *coder);
 void			release_dongle(t_simulation *sim, t_dongle *f_dongle,
 					t_dongle *s_dongle, long cooldown_ms);
-int				choose(t_queue_node *a, t_queue_node *b);
 
 //log helpers
 void			log_message(t_simulation *sim, int id, char *msg);
@@ -123,9 +122,10 @@ int				approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 //monitor
 void			*monitor_routine(void *args);
 
-//time utils
+//utils
 int				interruptible_sleep(t_simulation *sim, long duration_ms);
-
 int				checker(t_simulation *sim);
 void			heap_remove_by_id(t_heap *h, int coder_id);
+int				choose(t_queue_node *a, t_queue_node *b);
+
 #endif
