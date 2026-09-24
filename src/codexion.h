@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:06 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/22 11:54:22 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/24 19:47:02 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ void			release_dongle(t_simulation *sim, t_dongle *f_dongle,
 
 //log helpers
 void			log_message(t_simulation *sim, int id, char *msg);
-void			log_monitor_message(t_simulation *sim, int id, char *msg);
+void			log_monitor_message(t_simulation *sim, int id, char *msg,
+					long deadline);
 int				approve_log(t_coder *thread, t_dongle *first, t_dongle *second);
 
 //monitor

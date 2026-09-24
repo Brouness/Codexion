@@ -6,7 +6,7 @@
 /*   By: ybourajl <ybourajl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 15:35:26 by ybourajl          #+#    #+#             */
-/*   Updated: 2026/09/20 15:53:42 by ybourajl         ###   ########.fr       */
+/*   Updated: 2026/09/24 19:47:19 by ybourajl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static void	wake_dongles(t_simulation *sim)
 
 static int	check_routine(t_simulation *sim, int *all_done)
 {
-	int	i;
+	int		i;
+	long	deadline;
 
 	i = 0;
 	while (i < sim->infos->number_of_coders)
@@ -37,11 +38,12 @@ static int	check_routine(t_simulation *sim, int *all_done)
 			< sim->infos->number_of_compiles_required)
 		{
 			*all_done = 0;
-			if (get_time_fn() - sim->coders[i].last_compile_start
-				> sim->infos->time_to_burnout)
+			deadline = get_time_fn() - sim->coders[i].last_compile_start;
+			if (deadline > sim->infos->time_to_burnout)
 			{
 				sim->stopped = 1;
-				log_monitor_message(sim, sim->coders[i].id, "burned out");
+				log_monitor_message(sim, sim->coders[i].id, "burned out",
+					deadline);
 				pthread_cond_broadcast(&sim->state_cond);
 				pthread_mutex_unlock(&sim->state_lock);
 				wake_dongles(sim);
